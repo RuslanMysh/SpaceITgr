@@ -1,0 +1,11 @@
+﻿@page
+@using SpaceITgr.Models;
+@model SpaceITgr.Views.Planet.Satellite171Model
+@{
+	ViewBag.CodeName = $"{SpaceData.Planets[1731].CodeName}";
+	ViewBag.CurrentTime = $"{SpaceData.Planets[173].CurrentTime}";
+	Layout = "/Views/Shared/_Layout.cshtml";
+}
+<div>
+	<p>Луна</p>
+</div>
