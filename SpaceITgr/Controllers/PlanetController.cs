@@ -2,15 +2,17 @@
 
 namespace SpaceITgr.Controllers
 {
-	[Route("System17")]
+    [Route("")]
+    [Route("System17")]
 	public class PlanetController : Controller
 	{
 		[Route("Planet173")]
 		[Route("Earth")]
 
+		[Route("")]
 		[HttpGet]
-		public IActionResult Planet173()
-		{
+		public IActionResult Index()//Planet173
+        {
 			return View();
 		}
 		[Route("Satellite1731")]

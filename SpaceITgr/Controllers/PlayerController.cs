@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SpaceITgr.Models;
 
 namespace SpaceITgr.Controllers
 {
+	[Route("Player")]
 	public class PlayerController : Controller
 	{
-		public IActionResult Player()
+        [Route("PlayerPlanets")]
+        public JsonResult PlayerPlanets()
 		{
-			return View();
+			return Json(SpaceData.Planets);
 		}
 	}
 }
