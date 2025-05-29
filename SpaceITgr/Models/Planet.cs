@@ -8,7 +8,7 @@
 		public DateTime CurrentTime { get; set; }
 		public string Belongs { get; set; }
 		public bool StudiedByPlayer { get; set; }
-		PlanetType PlanetType{ get; set; }
+        public PlanetType PlanetType { get; set; }
 
 		public Planet(long Population, string CodeName, string Belongs, bool StudiedByPlayer, PlanetType PlanetType, string LocalName, DateTime CurrentTime)
 		{

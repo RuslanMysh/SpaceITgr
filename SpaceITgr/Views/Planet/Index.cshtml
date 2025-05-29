@@ -42,15 +42,119 @@
     ButtonGroup.add(ButtonPlanets);
     ButtonGroup.add(TextBtn);
 
-
-    ButtonGroup.on('click', () =>
-        fetch('Player/PlayerPlanets')
-        .then(response => response.json())
-            .then(Planets => document.createElement(""))
-    );
-
-
     stage.add(layer);
     layer.add(ButtonGroup);
+
+    ButtonGroup.on('click', async (evt) => {
+        evt.cancelBubble = true;
+
+        try {
+            const response = await fetch('/Player/PlayerPlanets');
+            if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+
+            const planets = await response.json();
+            console.log('Получены планеты:', planets);
+
+            // Создаём модальное окно
+            const modal = document.createElement('div');
+            modal.id = 'planet-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000;
+                width: 350px;
+                max-height: 80vh;
+                padding: 20px;
+                background: #f0f8ff;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                overflow-y: auto;
+            `;
+
+            // Заголовок
+            const title = document.createElement('h3');
+            title.textContent = 'Доступные планеты';
+            title.style.cssText = `
+                text-align: center;
+                margin-bottom: 20px;
+                color: #2c3e50;
+                border-bottom: 1px solid #3498db;
+                padding-bottom: 10px;
+            `;
+            modal.appendChild(title);
+
+            // Список планет
+            const list = document.createElement('div');
+
+            planets.forEach(planet => {
+                const item = document.createElement('div');
+                item.className = 'planet-item';
+                item.style.cssText = `
+                    padding: 12px;
+                    margin: 8px 0;
+                    background: ${planet.Studied ? '#e6f7ff' : '#ffe6e6'};
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    border-left: 4px solid ${getTypeColor(planet.Type)};
+                `;
+
+                item.innerHTML = `
+                    <div style="font-weight: bold;">${planet.Name}</div>
+                    <div style="font-size: 0.9em; color: #555;">
+                        Тип: ${formatType(planet.Type)}
+                        ${planet.Studied ? '✓ Исследована' : '✗ Не исследована'}
+                    </div>
+                `;
+
+                item.addEventListener('click', () => {
+                    console.log(`Выбрана планета: ${planet.Name} (ID: ${planet.Id})`);
+                    // Здесь можно добавить логику перехода
+                });
+
+                list.appendChild(item);
+            });
+
+            modal.appendChild(list);
+            document.body.appendChild(modal);
+
+            // Функции для оформления
+            function getTypeColor(type) {
+                const colors = {
+                    'Earth_Type': '#2ecc71',
+                    'Gas_Giants': '#e74c3c',
+                    'Dwarf_Planets': '#f39c12',
+                    'Satellite': '#3498db'
+                };
+                return colors[type] || '#95a5a6';
+            }
+
+            function formatType(type) {
+                const names = {
+                    'Earth_Type': 'Землеподобная',
+                    'Gas_Giants': 'Газовый гигант',
+                    'Dwarf_Planets': 'Карликовая планета',
+                    'Satellite': 'Спутник'
+                };
+                return names[type] || type;
+            }
+
+            // Закрытие при клике вне окна
+            const closeModal = (e) => {
+                if (!modal.contains(e.target)) {
+                    modal.remove();
+                    document.removeEventListener('click', closeModal);
+                }
+            };
+            document.addEventListener('click', closeModal);
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Не удалось загрузить список планет');
+        }
+    });
+    
     layer.draw();
 </script>

@@ -6,10 +6,17 @@ namespace SpaceITgr.Controllers
 	[Route("Player")]
 	public class PlayerController : Controller
 	{
-        [Route("PlayerPlanets")]
+		[HttpGet("PlayerPlanets")]
         public JsonResult PlayerPlanets()
 		{
-			return Json(SpaceData.Planets);
+            var planetsList = SpaceData.Planets.Select(p => new
+            {
+                Id = p.Key,
+                Name = p.Value.LocalName, // Используем LocalName для отображения
+                Type = p.Value.PlanetType.ToString(),
+                Studied = p.Value.StudiedByPlayer
+            }).ToList();
+            return Json(planetsList);
 		}
 	}
 }
