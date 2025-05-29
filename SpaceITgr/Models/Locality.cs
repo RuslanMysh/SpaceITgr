@@ -5,20 +5,20 @@
 		public string Name { get; set; }
 		public int Population { get; set; }
 		public int QuestCount { get; set; }
-		QuestType QuestType { get; set; }
+        LocalityType LocalityType { get; set; }
 
-		public Locality(string Name, int Population, int QuestCount, QuestType QuestType)
+		public Locality(string Name, int Population, int QuestCount, LocalityType QuestType)
 		{
 			this.Name = Name;
 			this.Population = Population;
 			this.QuestCount = QuestCount;
-			this.QuestType = QuestType;
+			this.LocalityType = LocalityType;
 		}
 	}
-	public enum QuestType
-	{
-		Completed,
-		Failed,
-		Active
+	public enum LocalityType
+    {
+		CapitalCity,
+		Village,
+		Surface
 	}
 }
