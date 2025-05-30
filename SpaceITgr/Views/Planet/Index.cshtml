@@ -22,7 +22,20 @@
 
     const ButtonPlanets = new Konva.Rect(
     {
-            x: 30, y: 10, width: 100, height: 40, stroke: '#555', strokeWidth: 2, fill: '#e3e3e3', cornerRadius: 5
+            x: 30,
+            y: 10,
+            width: 100,
+            height: 40,
+            stroke: 'green',
+            strokeWidth: 2,
+            fill: '#black',
+            cornerRadius: 5,
+            shadowColor: 'grey',
+            shadowBlur: 10,
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowOppasity: 0.1
+            
     });
 
     const TextBtn = new Konva.Text(
@@ -35,7 +48,8 @@
         fontFamily: 'Calibri',
         fill: 'black',
         padding: 5,
-        align: 'center'
+        align: 'center',
+        fill: 'green'
     });
 
     const ButtonGroup = new Konva.Group();
@@ -49,69 +63,89 @@
         evt.cancelBubble = true;
 
         try {
+            // 1. Запрос данных
             const response = await fetch('/Player/PlayerPlanets');
-            if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
+            // 2. Получение данных
             const planets = await response.json();
-            console.log('Получены планеты:', planets);
+            console.log("Raw planets data:", planets); // Важно для отладки
 
-            // Создаём модальное окно
+            // 3. Удаление старого модального окна
+            const oldModal = document.getElementById('planet-modal');
+            if (oldModal) oldModal.remove();
+
+            // 4. Создание модального окна
             const modal = document.createElement('div');
             modal.id = 'planet-modal';
             modal.style.cssText = `
                 position: fixed;
                 top: 50%;
                 left: 50%;
+                border: 2px solid #027f00;
                 transform: translate(-50%, -50%);
                 z-index: 1000;
                 width: 350px;
                 max-height: 80vh;
                 padding: 20px;
-                background: #f0f8ff;
+                background: #020302;
                 border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                box-shadow: 0 0 80px grey;
                 overflow-y: auto;
             `;
 
-            // Заголовок
+            // 5. Заголовок
             const title = document.createElement('h3');
-            title.textContent = 'Доступные планеты';
+            title.textContent = 'Известные Вам объекты';
             title.style.cssText = `
                 text-align: center;
                 margin-bottom: 20px;
-                color: #2c3e50;
-                border-bottom: 1px solid #3498db;
+                color: #027f00;
+                border-bottom: 1px solid #027f00;
                 padding-bottom: 10px;
             `;
             modal.appendChild(title);
 
-            // Список планет
+            // 6. Список планет
             const list = document.createElement('div');
 
-            planets.forEach(planet => {
+            planets.forEach(p => {
+                // Явное приведение типов и проверка
+                const planet = {
+                    id: p?.Id || p?.id || 0,
+                    name: p?.Name || p?.name || 'Неизвестный объект',
+                    type: p?.Type || p?.type || 'Unknown',
+                    studied: Boolean(p?.Studied || p?.studied || false)
+                };
+
+                console.log("Processing planet:", planet); // Логируем каждую планету
+
                 const item = document.createElement('div');
-                item.className = 'planet-item';
                 item.style.cssText = `
                     padding: 12px;
                     margin: 8px 0;
-                    background: ${planet.Studied ? '#e6f7ff' : '#ffe6e6'};
+                    background: ${planet.studied ? '#001400' : '#050100'};
                     border-radius: 6px;
                     cursor: pointer;
                     transition: all 0.3s;
-                    border-left: 4px solid ${getTypeColor(planet.Type)};
+                    border-left: 4px solid ${getTypeColor(planet.type)};
                 `;
 
                 item.innerHTML = `
-                    <div style="font-weight: bold;">${planet.Name}</div>
-                    <div style="font-size: 0.9em; color: #555;">
-                        Тип: ${formatType(planet.Type)}
-                        ${planet.Studied ? '✓ Исследована' : '✗ Не исследована'}
+                     <div style="font-weight: bold; color: #028f00; ">${planet.name} | ${planet.id}</div>
+                    <div style="font-size: 0.9em; color: #027f00;">
+                        Тип: ${formatType(planet.type)}
+                        ${planet.studied ? '✓ Исследована' : '✗ Не исследована'}
                     </div>
                 `;
 
                 item.addEventListener('click', () => {
-                    console.log(`Выбрана планета: ${planet.Name} (ID: ${planet.Id})`);
-                    // Здесь можно добавить логику перехода
+                    console.log('Выбрана планета:', planet);
+                    const planetURL = `/${planet.name}`;
+                    console.log(`Переход на страницу планеты: ${planetURL}`);
+
+                    window.location.href = planetURL;
+
                 });
 
                 list.appendChild(item);
@@ -120,13 +154,13 @@
             modal.appendChild(list);
             document.body.appendChild(modal);
 
-            // Функции для оформления
+            // 7. Вспомогательные функции
             function getTypeColor(type) {
                 const colors = {
                     'Earth_Type': '#2ecc71',
-                    'Gas_Giants': '#e74c3c',
-                    'Dwarf_Planets': '#f39c12',
-                    'Satellite': '#3498db'
+                    'Gas_Giants': '#875c07',
+                    'Dwarf_Planets': '#078f66',
+                    'Satellite': '#525557'
                 };
                 return colors[type] || '#95a5a6';
             }
@@ -141,7 +175,7 @@
                 return names[type] || type;
             }
 
-            // Закрытие при клике вне окна
+            // 8. Закрытие при клике вне окна
             const closeModal = (e) => {
                 if (!modal.contains(e.target)) {
                     modal.remove();
@@ -152,7 +186,7 @@
 
         } catch (error) {
             console.error('Ошибка:', error);
-            alert('Не удалось загрузить список планет');
+            alert('Ошибка при загрузке списка объектов: ' + error.message);
         }
     });
     

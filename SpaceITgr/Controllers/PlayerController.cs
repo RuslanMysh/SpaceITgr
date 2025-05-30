@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpaceITgr.Models;
+using System.Linq;
 
 namespace SpaceITgr.Controllers
 {
@@ -12,10 +13,11 @@ namespace SpaceITgr.Controllers
             var planetsList = SpaceData.Planets.Select(p => new
             {
                 Id = p.Key,
-                Name = p.Value.LocalName, // Используем LocalName для отображения
+                Name = p.Value.LocalName, 
                 Type = p.Value.PlanetType.ToString(),
                 Studied = p.Value.StudiedByPlayer
-            }).ToList();
+            }).ToArray();
+
             return Json(planetsList);
 		}
 	}
