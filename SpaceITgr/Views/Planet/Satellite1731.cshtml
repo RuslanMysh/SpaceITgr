@@ -3,11 +3,10 @@
 @model SpaceITgr.Views.Planet.Satellite171Model
 @{
 	ViewBag.CodeName = $"{SpaceData.Planets[1731].CodeName}";
-	ViewBag.CurrentTime = $"{SpaceData.Planets[1731].CurrentTime}";
+	ViewBag.CurrentTime = SpaceData.Planets[1731].CurrentTime.ToString("o");
 	ViewBag.LocalName = $"{SpaceData.Planets[1731].LocalName}";
+	ViewBag.URL = $"/Images/Moon.png";
+	ViewBag.PlanetColor = "black";
 	Layout = "/Views/Shared/_Layout.cshtml";
 }
-<div>
-	<img width="100%" height="100%" src="/Images/Moon.png"/>
-</div>
 

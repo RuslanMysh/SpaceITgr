@@ -3,14 +3,11 @@
 @model SpaceITgr.Views.Planet.PlanetModel
 @{
     ViewBag.CodeName = $"{SpaceData.Planets[173].CodeName}";
-    ViewBag.CurrentTime = $"{SpaceData.Planets[173].CurrentTime}";
+    ViewBag.CurrentTime = SpaceData.Planets[173].CurrentTime.ToString("o");
     ViewBag.LocalName = $"{SpaceData.Planets[173].LocalName}";
+    ViewBag.URL = $"/Images/Earth.png";
+    ViewBag.PlanetColor = "#4390eb";
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<body>
-    <div>
-        <img width="100%" height="100%" src="/Images/Earth.png" />
-    </div>
-</body>
 

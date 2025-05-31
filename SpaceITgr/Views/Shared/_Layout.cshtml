@@ -15,7 +15,7 @@
             font-size: 40px;
             display: block;
         }
-
+        
         .bg{
             background-image: url("/Images/StarsBG.jpg");
         
@@ -23,59 +23,115 @@
         }
     </style>
 </head>
+
 <body class="bg" style="color: white; background-color: black; font-family: Courier;">
+
     <div>
         <span id="planetName">@ViewBag.LocalName</span>
     </div>
-    <div id="liveDateTime">
 
-	</div>
+    <div id="liveDateTime"></div>
 
-	<div id="map-container" class="bg" style="background-color: black; margin-top: 5%"> </div>
+    <div id="konva-container" style="width: 100%; height: 100vh; position: relative;"></div>
 
 	<div>
 		@RenderBody()
 	</div>
+
 </body>
+@RenderSection("Scripts", required: false)
 
 <script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
 
 <script>
+
+
     //часы
-    function updateDateTime() {
-        const now = new Date();
-        const options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        };
-        document.getElementById('liveDateTime').textContent = now.toLocaleDateString('ru-RU', options);
-    }
 
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    (function () {
+        //localStorage.clear();
 
 
 
+        // 1. Пытаемся загрузить сохранённое время из localStorage
+        const savedTime = localStorage.getItem('planetTime');
+
+        // 2. Если есть сохранённое время - используем его, иначе берём ViewBag.CurrentTime
+        const initialTime = savedTime
+            ? new Date(savedTime)
+            : new Date("@Html.Raw(ViewBag.CurrentTime)");
+
+        // 3. Запоминаем, когда страница загрузилась (для расчёта прошедшего времени)
+        const pageLoadTime = new Date();
+
+        function updateClock() {
+            // 4. Вычисляем текущее время на планете:
+            //    начальное время + разница между текущим моментом и загрузкой страницы
+            const now = new Date();
+            const timePassed = now - pageLoadTime;
+            const planetTime = new Date(initialTime.getTime() + timePassed);
+
+            // 5. Сохраняем текущее время в localStorage
+            localStorage.setItem('planetTime', planetTime.toISOString());
+
+            // 6. Форматируем и выводим время
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+
+            document.getElementById('liveDateTime').textContent =
+                planetTime.toLocaleDateString('ru-RU', options);
+        }
+
+        // 7. Запускаем обновление каждую секунду
+        setInterval(updateClock, 1000);
+        updateClock(); // Первый запуск
+    })();
 
 
     //кнопка планет
 
 
-    const stage = new Konva.Stage(
-    {
-            container: 'map-container', width: window.innerWidth, height: 400
+    const stage = new Konva.Stage({
+        container: 'konva-container',
+        width: window.innerWidth,
+        height: 2300
     });
-    const layer = new Konva.Layer();
+
+    const mainLayer = new Konva.Layer();
+    stage.add(mainLayer);
+
+    @RenderSection("Scripts", required: false)
+
+    // Загрузка изображения планеты
+    const imageObj = new Image();
+    imageObj.onload = function () {
+        const planetImage = new Konva.Image({
+            x: 1,
+            y: 500,
+            image: imageObj,
+            width: 2560,
+            height: 1696,
+            shadowColor: '@ViewBag.PlanetColor',
+            shadowBlur: 25,
+            shadowOpacity: 1
+        });
+
+        mainLayer.add(planetImage);
+        mainLayer.draw();
+    };
+    imageObj.src = "@ViewBag.URL";
 
     const ButtonPlanets = new Konva.Rect(
     {
-            x: 1500,
-            y: 15,
+            x: 1600,
+            y: 120,
             width: 400,
             height: 100,
             stroke: 'white',
@@ -90,8 +146,8 @@
 
     const TextBtn = new Konva.Text(
     {
-        x: 1500,
-        y: 20,
+        x: 1600,
+        y: 120,
         width: 400,
         text: 'ПЛАНЕТЫ',
         fontSize: 85,
@@ -106,8 +162,7 @@
     ButtonGroup.add(ButtonPlanets);
     ButtonGroup.add(TextBtn);
 
-    stage.add(layer);
-    layer.add(ButtonGroup);
+    
 
     ButtonGroup.on('click', async (evt) => {
         evt.cancelBubble = true;
@@ -255,8 +310,8 @@
 
     const ButtonQuests = new Konva.Rect(
         {
-            x: 500,
-            y: 15,
+            x: 400,
+            y: 120,
             width: 400,
             height: 100,
             stroke: 'white',
@@ -271,8 +326,8 @@
 
     const TextQuests = new Konva.Text(
         {
-            x: 500,
-            y: 20,
+            x: 400,
+            y: 120,
             width: 400,
             text: 'КВЕСТЫ',
             fontSize: 85,
@@ -287,7 +342,7 @@
     ButtonQuestsGroup.add(ButtonQuests);
     ButtonQuestsGroup.add(TextQuests);
 
-    layer.add(ButtonQuestsGroup);
+    
 
     ButtonQuestsGroup.on('click', async (evt) => {
         evt.cancelBubble = true;
@@ -424,7 +479,7 @@
     const ButtonInventory = new Konva.Rect(
         {
             x: 1000,
-            y: 15,
+            y: 120,
             width: 400,
             height: 100,
             stroke: 'white',
@@ -440,7 +495,7 @@
     const TextInventory = new Konva.Text(
         {
             x: 1000,
-            y: 20,
+            y: 120,
             width: 400,
             text: 'РЮКЗАК',
             fontSize: 85,
@@ -455,7 +510,7 @@
     ButtonInventoryGroup.add(ButtonInventory);
     ButtonInventoryGroup.add(TextInventory);
 
-    layer.add(ButtonInventoryGroup);
+    
 
     ButtonInventoryGroup.on('click', async (evt) => {
         evt.cancelBubble = true;
@@ -560,7 +615,9 @@
             alert('Ошибка при загрузке списка объектов: ' + error.message);
         }
     });
-
+    mainLayer.add(ButtonGroup);
+    mainLayer.add(ButtonQuestsGroup);
+    mainLayer.add(ButtonInventoryGroup);
     layer.draw();
 </script>
 
