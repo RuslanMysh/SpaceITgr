@@ -201,6 +201,174 @@
         }
     });
 
+
+
+
+
+
+
+    const ButtonQuests = new Konva.Rect(
+        {
+            x: 130,
+            y: 15,
+            width: 100,
+            height: 40,
+            stroke: 'white',
+            strokeWidth: 2,
+            fill: '#black',
+            cornerRadius: 5,
+            shadowColor: 'white',
+            shadowBlur: 20,
+            shadowOppasity: 0.1
+
+        });
+
+    const TextQuests = new Konva.Text(
+        {
+            x: 130,
+            y: 20,
+            width: 100,
+            text: 'КВЕСТЫ',
+            fontSize: 20,
+            fontFamily: 'Courier',
+            fill: 'black',
+            padding: 5,
+            align: 'center',
+            fill: 'white'
+        });
+
+    const ButtonQuestsGroup = new Konva.Group();
+    ButtonQuestsGroup.add(ButtonQuests);
+    ButtonQuestsGroup.add(TextQuests);
+
+    layer.add(ButtonQuestsGroup);
+
+    ButtonQuestsGroup.on('click', async (evt) => {
+        evt.cancelBubble = true;
+
+        try {
+            // 1. Запрос данных
+            const response = await fetch('/Player/PlayerQuests');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            // 2. Получение данных
+            const quests = await response.json();
+            console.log("Raw planets data:", quests); // Важно для отладки
+
+            // 3. Удаление старого модального окна
+            const oldModal = document.getElementById('quest-modal');
+            if (oldModal) oldModal.remove();
+
+            // 4. Создание модального окна
+            const modal = document.createElement('div');
+            modal.id = 'quest-modal';
+            modal.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    border: 2px solid white;
+                    transform: translate(-50%, -50%);
+                    z-index: 1000;
+                    width: 400px;
+                    max-height: 80vh;
+                    padding: 20px;
+                    background: #020302;
+                    border-radius: 10px;
+                    box-shadow: 0 0 40px white;
+                    overflow-y: auto;
+                `;
+
+            // 5. Заголовок
+            const title = document.createElement('h3');
+            title.textContent = 'Ваши квесты';
+            title.style.cssText = `
+                    font-family: 'Courier';
+                    text-align: center;
+                    margin-bottom: 20px;
+                    color: white;
+                    border-bottom: 1px solid white;
+                    padding-bottom: 10px;
+                `;
+            modal.appendChild(title);
+
+            // 6. Список квестов
+            const list = document.createElement('div');
+
+            quests.forEach(q => {
+                // Явное приведение типов и проверка
+                const quest = {
+                    id: q?.Id || q?.id || 0,
+                    name: q?.Name || q?.name || 'Неизвестный квест',
+                    type: q?.Type || q?.type || 'Unknown',
+                    decs: q?.Desc || q?.desc || 'Неизвестно',
+                    date: q?.Date || q?.date || '01.01.1970 00:00:01'
+                };
+
+                console.log("Processing quest:", quest); // Логируем каждый квест
+
+                const item = document.createElement('div');
+                item.style.cssText = `
+                        padding: 12px;
+                        margin: 8px 0;
+                        background: #171717;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        border-left: 4px solid ${getTypeColor(quest.type)};
+                    `;
+
+                item.innerHTML = `
+                        <div style="font-weight: bold; color: white; ">${quest.name} | ${quest.date}</div>
+                        <div style="font-size: 0.9em; color: #b5b5b5;">
+                         Тип: ${formatType(quest.type)}                        
+                        </div>
+                    `;
+
+                item.addEventListener('click', () => {
+                    alert(quest.decs);
+                });
+
+                list.appendChild(item);
+            });
+
+            modal.appendChild(list);
+            document.body.appendChild(modal);
+
+            // 7. Вспомогательные функции
+            function getTypeColor(type) {
+                const colors = {
+                    'Completed': '#454545',    
+                    'Current': '#ffffff',     
+                    'Failed': '#0d0d0d',       
+                };
+                return colors[type] || '#95a5a6'; 
+            }
+
+            function formatType(type) {
+                const names = {
+                    'Completed': 'Выполнен',
+                    'Current': 'Активный',
+                    'Failed': 'Проваленный',
+                };
+                return names[type] || type;
+            }
+
+            // 8. Закрытие при клике вне окна
+            const closeModal = (e) => {
+                if (!modal.contains(e.target)) {
+                    modal.remove();
+                    document.removeEventListener('click', closeModal);
+                }
+            };
+            document.addEventListener('click', closeModal);
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка при загрузке списка объектов: ' + error.message);
+        }
+    });
+
+
     layer.draw();
 </script>
 

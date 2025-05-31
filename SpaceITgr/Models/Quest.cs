@@ -5,7 +5,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime DateOfAppointment { get; set; }
-        QuestType QuestType { get; set; }
+        public QuestType QuestType { get; set; }
 
         public Quest(string Name, string Description, DateTime DateOfAppointment, QuestType QuestType)
         {

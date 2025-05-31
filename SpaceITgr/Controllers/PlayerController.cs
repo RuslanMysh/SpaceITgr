@@ -20,5 +20,21 @@ namespace SpaceITgr.Controllers
 
             return Json(planetsList);
 		}
+
+		[HttpGet("PlayerQuests")]
+		public JsonResult PlayerQuests()
+		{
+			var QuestsList = SpaceData.Quests.Select(p => new
+			{
+				Id = p.Key,
+				Name = p.Value.Name,
+				Type = p.Value.QuestType.ToString(),
+                Desc = p.Value.Description,
+                Date = p.Value.DateOfAppointment.ToString()
+
+            }).ToArray();
+
+			return Json(QuestsList);
+		}
 	}
 }
