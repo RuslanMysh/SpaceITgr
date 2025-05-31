@@ -2,16 +2,30 @@
 
 <head>
 	<title>@ViewBag.CodeName</title>
-</head>
+    <style>
+        #planetName
+        {
+            text-align: center;
+            font-size: 90px;
+            display: block;
+        }
 
+        #liveDateTime {
+            text-align: center;
+            font-size: 40px;
+            display: block;
+        }
+    </style>
+</head>
 <body style="color: white; background-color: black; font-family: Courier;">
-	<div> 
-		@ViewBag.CurrentTime
-        <br/>
-        @ViewBag.LocalName
+    <div>
+        <span id="planetName">@ViewBag.LocalName</span>
+    </div>
+    <div id="liveDateTime">
+
 	</div>
 
-	<div id="map-container" style="background-color: black"></div>
+	<div id="map-container" style="background-color: black; margin-top: 5%"> </div>
 
 	<div>
 		@RenderBody()
@@ -21,6 +35,31 @@
 <script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
 
 <script>
+    //часы
+    function updateDateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        document.getElementById('liveDateTime').textContent = now.toLocaleDateString('ru-RU', options);
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+
+
+
+
+
+
+
     const stage = new Konva.Stage(
     {
             container: 'map-container', width: 1920, height: 1280
@@ -31,8 +70,8 @@
     {
             x: 20,
             y: 15,
-            width: 100,
-            height: 40,
+            width: 400,
+            height: 100,
             stroke: 'white',
             strokeWidth: 2,
             fill: '#black',
@@ -40,16 +79,16 @@
             shadowColor: 'white',
             shadowBlur: 20,
             shadowOppasity: 0.1
-
+           
     });
 
     const TextBtn = new Konva.Text(
     {
         x: 20,
         y: 20,
-        width: 100,
+        width: 400,
         text: 'ПЛАНЕТЫ',
-        fontSize: 20,
+        fontSize: 85,
         fontFamily: 'Courier',
         fill: 'black',
         padding: 5,
@@ -209,10 +248,10 @@
 
     const ButtonQuests = new Konva.Rect(
         {
-            x: 130,
+            x: 500,
             y: 15,
-            width: 100,
-            height: 40,
+            width: 400,
+            height: 100,
             stroke: 'white',
             strokeWidth: 2,
             fill: '#black',
@@ -225,11 +264,11 @@
 
     const TextQuests = new Konva.Text(
         {
-            x: 130,
+            x: 500,
             y: 20,
-            width: 100,
+            width: 400,
             text: 'КВЕСТЫ',
-            fontSize: 20,
+            fontSize: 85,
             fontFamily: 'Courier',
             fill: 'black',
             padding: 5,
