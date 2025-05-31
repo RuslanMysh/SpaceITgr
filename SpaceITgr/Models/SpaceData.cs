@@ -15,6 +15,11 @@ namespace SpaceITgr.Models
 		{
 			{"p1", new Quest("Первый квест", "Блаблаблабла", new DateTime(2025, 05, 31, 11, 30, 00), QuestType.Current) },
 			{"s1", new Quest("Помощь учёному", "Блаблаблабла", new DateTime(2025, 06, 01, 14, 25, 00), QuestType.Current) }
-		}; 
+		};
+
+		public static List<Item> Inventory = new List<Item>()
+		{
+			{new Item("Предмет", 1, 1) }
+		};
 	}
 }

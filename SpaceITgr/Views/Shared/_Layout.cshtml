@@ -15,9 +15,15 @@
             font-size: 40px;
             display: block;
         }
+
+        .bg{
+            background-image: url("/Images/StarsBG.jpg");
+        
+            background-repeat: repeat;
+        }
     </style>
 </head>
-<body style="color: white; background-color: black; font-family: Courier;">
+<body class="bg" style="color: white; background-color: black; font-family: Courier;">
     <div>
         <span id="planetName">@ViewBag.LocalName</span>
     </div>
@@ -25,7 +31,7 @@
 
 	</div>
 
-	<div id="map-container" style="background-color: black; margin-top: 5%"> </div>
+	<div id="map-container" class="bg" style="background-color: black; margin-top: 5%"> </div>
 
 	<div>
 		@RenderBody()
@@ -57,18 +63,18 @@
 
 
 
-
+    //кнопка планет
 
 
     const stage = new Konva.Stage(
     {
-            container: 'map-container', width: 1920, height: 1280
+            container: 'map-container', width: window.innerWidth, height: 400
     });
     const layer = new Konva.Layer();
 
     const ButtonPlanets = new Konva.Rect(
     {
-            x: 20,
+            x: 1500,
             y: 15,
             width: 400,
             height: 100,
@@ -76,7 +82,7 @@
             strokeWidth: 2,
             fill: '#black',
             cornerRadius: 5,
-            shadowColor: 'white',
+            shadowColor: '#595959',
             shadowBlur: 20,
             shadowOppasity: 0.1
            
@@ -84,7 +90,7 @@
 
     const TextBtn = new Konva.Text(
     {
-        x: 20,
+        x: 1500,
         y: 20,
         width: 400,
         text: 'ПЛАНЕТЫ',
@@ -129,17 +135,17 @@
                 border: 2px solid white;
                 transform: translate(-50%, -50%);
                 z-index: 1000;
-                width: 350px;
-                max-height: 80vh;
+                width: 500px;
+                max-height: 100vh;
                 padding: 20px;
                 background: #020302;
                 border-radius: 10px;
-                box-shadow: 0 0 40px white;
+                    box-shadow: 0 0 40px #595959;
                 overflow-y: auto;
             `;
 
             // 5. Заголовок
-            const title = document.createElement('h3');
+            const title = document.createElement('h2');
             title.textContent = 'Известные Вам объекты';
             title.style.cssText = `
                 font-family: 'Courier';
@@ -167,9 +173,10 @@
 
                 const item = document.createElement('div');
                 item.style.cssText = `
+                    font-size: 20px;
                     padding: 12px;
                     margin: 8px 0;
-                            background: ${planet.studied ? '#010f00' : '#0f0000'};
+                    background: ${planet.studied ? '#010f00' : '#0f0000'};
                     border-radius: 6px;
                     cursor: pointer;
                     transition: all 0.3s;
@@ -178,7 +185,7 @@
 
                 item.innerHTML = `
                      <div style="font-weight: bold; color: white; ">${planet.name} | ${planet.id}</div>
-                                <div style="font-size: 0.9em; color: #b5b5b5;">
+                        <div style="font-size: 18px; color: #b5b5b5;">
                         Тип: ${formatType(planet.type)}
                         ${planet.studied ? '✓ Исследована' : '✗ Не исследована'}
                     </div>
@@ -242,7 +249,7 @@
 
 
 
-
+    //кнопка квестов
 
 
 
@@ -256,7 +263,7 @@
             strokeWidth: 2,
             fill: '#black',
             cornerRadius: 5,
-            shadowColor: 'white',
+            shadowColor: '#595959',
             shadowBlur: 20,
             shadowOppasity: 0.1
 
@@ -308,17 +315,17 @@
                     border: 2px solid white;
                     transform: translate(-50%, -50%);
                     z-index: 1000;
-                    width: 400px;
-                    max-height: 80vh;
+                    width: 500px;
+                    max-height: 100vh;
                     padding: 20px;
                     background: #020302;
                     border-radius: 10px;
-                    box-shadow: 0 0 40px white;
+                        box-shadow: 0 0 40px #595959;
                     overflow-y: auto;
                 `;
 
             // 5. Заголовок
-            const title = document.createElement('h3');
+            const title = document.createElement('h2');
             title.textContent = 'Ваши квесты';
             title.style.cssText = `
                     font-family: 'Courier';
@@ -347,6 +354,7 @@
 
                 const item = document.createElement('div');
                 item.style.cssText = `
+                        font-size: 20px;
                         padding: 12px;
                         margin: 8px 0;
                         background: #171717;
@@ -358,7 +366,7 @@
 
                 item.innerHTML = `
                         <div style="font-weight: bold; color: white; ">${quest.name} | ${quest.date}</div>
-                        <div style="font-size: 0.9em; color: #b5b5b5;">
+                        <div style="font-size: 18px; color: #b5b5b5;">
                          Тип: ${formatType(quest.type)}                        
                         </div>
                     `;
@@ -407,6 +415,151 @@
         }
     });
 
+
+
+
+    //кнопка инвентаря
+
+
+    const ButtonInventory = new Konva.Rect(
+        {
+            x: 1000,
+            y: 15,
+            width: 400,
+            height: 100,
+            stroke: 'white',
+            strokeWidth: 2,
+            fill: '#black',
+            cornerRadius: 5,
+            shadowColor: '#595959',
+            shadowBlur: 20,
+            shadowOppasity: 0.1
+
+        });
+
+    const TextInventory = new Konva.Text(
+        {
+            x: 1000,
+            y: 20,
+            width: 400,
+            text: 'РЮКЗАК',
+            fontSize: 85,
+            fontFamily: 'Courier',
+            fill: 'black',
+            padding: 5,
+            align: 'center',
+            fill: 'white'
+        });
+
+    const ButtonInventoryGroup = new Konva.Group();
+    ButtonInventoryGroup.add(ButtonInventory);
+    ButtonInventoryGroup.add(TextInventory);
+
+    layer.add(ButtonInventoryGroup);
+
+    ButtonInventoryGroup.on('click', async (evt) => {
+        evt.cancelBubble = true;
+
+        try {
+            // 1. Запрос данных
+            const response = await fetch('/Player/PlayerInventory');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            // 2. Получение данных
+            const items = await response.json();
+            console.log("Raw planets data:", items); // Важно для отладки
+
+            // 3. Удаление старого модального окна
+            const oldModal = document.getElementById('inventory-modal');
+            if (oldModal) oldModal.remove();
+
+            // 4. Создание модального окна
+            const modal = document.createElement('div');
+            modal.id = 'inventory-modal';
+            modal.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        border: 2px solid white;
+                        transform: translate(-50%, -50%);
+                        z-index: 1000;
+                        width: 500px;
+                        max-height: 100vh;
+                        padding: 20px;
+                        background: #020302;
+                        border-radius: 10px;
+                            box-shadow: 0 0 40px #595959;
+                        overflow-y: auto;
+                    `;
+
+            // 5. Заголовок
+            const title = document.createElement('h2');
+            title.textContent = 'Ваш рюкзак';
+            title.style.cssText = `
+                        font-family: 'Courier';
+                        text-align: center;
+                        margin-bottom: 20px;
+                        color: white;
+                        border-bottom: 1px solid white;
+                        padding-bottom: 10px;
+                    `;
+            modal.appendChild(title);
+
+            // 6. Список квестов
+            const list = document.createElement('div');
+
+            items.forEach(i => {
+                // Явное приведение типов и проверка
+                const invent = {
+                    name: i?.Name || i?.name || 'Неизвестный предмет',
+                    mass: i?.Mass || i?.mass || 'Unknown',
+                    count: i?.Count || i?.count || 'Неизвестно',
+                };
+
+                console.log("Processing invetory:", invent); // Логируем каждый квест
+
+                const item = document.createElement('div');
+                item.style.cssText = `
+                            font-size: 20px;
+                            padding: 12px;
+                            margin: 8px 0;
+                            background: #171717;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        `;
+
+                item.innerHTML = `
+                                    <div style="font-weight: bold; color: white; ">${invent.name}|${invent.mass}kg</div>
+                            <div style="font-size: 18px; color: #b5b5b5;">
+                                 Кол-во: ${invent.count}
+                            </div>
+                        `;
+
+                item.addEventListener('click', () => {
+                    alert(`предмет ${invent.name}`);
+                });
+
+                list.appendChild(item);
+            });
+
+            modal.appendChild(list);
+            document.body.appendChild(modal);
+
+            // 8. Закрытие при клике вне окна
+            const closeModal = (e) => {
+                if (!modal.contains(e.target)) {
+                    modal.remove();
+                    document.removeEventListener('click', closeModal);
+                }
+            };
+            document.addEventListener('click', closeModal);
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка при загрузке списка объектов: ' + error.message);
+        }
+    });
 
     layer.draw();
 </script>

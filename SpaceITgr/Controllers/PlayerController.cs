@@ -36,5 +36,19 @@ namespace SpaceITgr.Controllers
 
 			return Json(QuestsList);
 		}
-	}
+
+        [HttpGet("PlayerInventory")]
+        public JsonResult PlayerInventory()
+        {
+            var InventoryList = SpaceData.Inventory.Select(p => new
+            {
+                Name = p.Name,
+                Mass = p.Mass,
+                Count = p.Count
+
+            }).ToArray();
+
+            return Json(InventoryList);
+        }
+    }
 }
