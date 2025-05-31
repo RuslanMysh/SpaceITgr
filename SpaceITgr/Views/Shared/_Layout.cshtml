@@ -1,14 +1,206 @@
 ﻿<!DOCTYPE html>
-<html>
+
 <head>
 	<title>@ViewBag.CodeName</title>
 </head>
-<body>
+
+<body style="color: white; background-color: black; font-family: Courier;">
 	<div> 
 		@ViewBag.CurrentTime
+        <br/>
+        @ViewBag.LocalName
 	</div>
+
+	<div id="map-container" style="background-color: black"></div>
+
 	<div>
 		@RenderBody()
 	</div>
 </body>
-</html>
+
+<script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
+
+<script>
+    const stage = new Konva.Stage(
+    {
+            container: 'map-container', width: 1920, height: 1280
+    });
+    const layer = new Konva.Layer();
+
+    const ButtonPlanets = new Konva.Rect(
+    {
+            x: 20,
+            y: 15,
+            width: 100,
+            height: 40,
+            stroke: 'white',
+            strokeWidth: 2,
+            fill: '#black',
+            cornerRadius: 5,
+            shadowColor: 'white',
+            shadowBlur: 20,
+            shadowOppasity: 0.1
+
+    });
+
+    const TextBtn = new Konva.Text(
+    {
+        x: 20,
+        y: 20,
+        width: 100,
+        text: 'ПЛАНЕТЫ',
+        fontSize: 20,
+        fontFamily: 'Courier',
+        fill: 'black',
+        padding: 5,
+        align: 'center',
+        fill: 'white'
+    });
+
+    const ButtonGroup = new Konva.Group();
+    ButtonGroup.add(ButtonPlanets);
+    ButtonGroup.add(TextBtn);
+
+    stage.add(layer);
+    layer.add(ButtonGroup);
+
+    ButtonGroup.on('click', async (evt) => {
+        evt.cancelBubble = true;
+
+        try {
+            // 1. Запрос данных
+            const response = await fetch('/Player/PlayerPlanets');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            // 2. Получение данных
+            const planets = await response.json();
+            console.log("Raw planets data:", planets); // Важно для отладки
+
+            // 3. Удаление старого модального окна
+            const oldModal = document.getElementById('planet-modal');
+            if (oldModal) oldModal.remove();
+
+            // 4. Создание модального окна
+            const modal = document.createElement('div');
+            modal.id = 'planet-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                border: 2px solid white;
+                transform: translate(-50%, -50%);
+                z-index: 1000;
+                width: 350px;
+                max-height: 80vh;
+                padding: 20px;
+                background: #020302;
+                border-radius: 10px;
+                box-shadow: 0 0 40px white;
+                overflow-y: auto;
+            `;
+
+            // 5. Заголовок
+            const title = document.createElement('h3');
+            title.textContent = 'Известные Вам объекты';
+            title.style.cssText = `
+                font-family: 'Courier';
+                text-align: center;
+                margin-bottom: 20px;
+                color: white;
+                border-bottom: 1px solid white;
+                padding-bottom: 10px;
+            `;
+            modal.appendChild(title);
+
+            // 6. Список планет
+            const list = document.createElement('div');
+
+            planets.forEach(p => {
+                // Явное приведение типов и проверка
+                const planet = {
+                    id: p?.Id || p?.id || 0,
+                    name: p?.Name || p?.name || 'Неизвестный объект',
+                    type: p?.Type || p?.type || 'Unknown',
+                    studied: Boolean(p?.Studied || p?.studied || false)
+                };
+
+                console.log("Processing planet:", planet); // Логируем каждую планету
+
+                const item = document.createElement('div');
+                item.style.cssText = `
+                    padding: 12px;
+                    margin: 8px 0;
+                            background: ${planet.studied ? '#010f00' : '#0f0000'};
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    border-left: 4px solid ${getTypeColor(planet.type)};
+                `;
+
+                item.innerHTML = `
+                     <div style="font-weight: bold; color: white; ">${planet.name} | ${planet.id}</div>
+                                <div style="font-size: 0.9em; color: #b5b5b5;">
+                        Тип: ${formatType(planet.type)}
+                        ${planet.studied ? '✓ Исследована' : '✗ Не исследована'}
+                    </div>
+                `;
+
+                item.addEventListener('click', () => {
+                    console.log('Выбрана планета:', planet);
+                    if (planet.studied == true) {
+                        const planetURL = `/${planet.name}`;
+                        console.log(`Переход на страницу планеты: ${planetURL}`);
+                        window.location.href = planetURL;
+                    }
+                    else
+                    {
+                        alert("Объект не исследован");
+                    }
+
+                });
+
+                list.appendChild(item);
+            });
+
+            modal.appendChild(list);
+            document.body.appendChild(modal);
+
+            // 7. Вспомогательные функции
+            function getTypeColor(type) {
+                const colors = {
+                    'Earth_Type': 'white',
+                    'Gas_Giants': '#121212',
+                    'Dwarf_Planets': '#4d4b4b',
+                    'Satellite': '#8c8c8c'
+                };
+                return colors[type] || '#95a5a6';
+            }
+
+            function formatType(type) {
+                const names = {
+                    'Earth_Type': 'Землеподобная',
+                    'Gas_Giants': 'Газовый гигант',
+                    'Dwarf_Planets': 'Карликовая планета',
+                    'Satellite': 'Спутник'
+                };
+                return names[type] || type;
+            }
+
+            // 8. Закрытие при клике вне окна
+            const closeModal = (e) => {
+                if (!modal.contains(e.target)) {
+                    modal.remove();
+                    document.removeEventListener('click', closeModal);
+                }
+            };
+            document.addEventListener('click', closeModal);
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка при загрузке списка объектов: ' + error.message);
+        }
+    });
+
+    layer.draw();
+</script>
+
