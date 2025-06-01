@@ -1,7 +1,21 @@
-﻿@page
-@using SpaceITgr.Models;
+﻿@using SpaceITgr.Models;
 @model SpaceITgr.Views.City.CapitalCityModel
 @{
-    ViewBag.CityName = SpaceData.Locations["c1"].Name;
+    ViewBag.LoactionName = SpaceData.Locations["c1"].Name;
+    ViewBag.LoactionPopulation = SpaceData.Locations["c1"].Population;
     Layout = "/Views/Shared/_LayoutCity.cshtml";
 }
+<head>
+    <style>
+        .bg {
+            background-image: url("/Images/city1.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body class = "bg">
+
+</body>
+

@@ -1,6 +1,7 @@
-﻿@page
+﻿@using SpaceITgr.Models;
 @model SpaceITgr.Views.Shared.PlayerButtonsModel
 @{
+
 }
 <script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
 <script>
@@ -65,7 +66,6 @@
     });
 
     const mainLayer = new Konva.Layer();
-    
 
     //город
     const City = new Konva.Circle({
@@ -74,13 +74,16 @@
         radius: @ViewBag.CityTransform['r'],
         fill: '#black',
         stroke: 'white',
-        strokeWidth: 2
+        strokeWidth: 2,
+        shadowColor: '@ViewBag.PlanetColor',
+        shadowBlur: 25,
+        shadowOpacity: 1
     });
     
     mainLayer.add(City);
     City.on("click", c =>
     {
-        const cityURL = '/Locality/city1';
+        const cityURL = '/Locality/@ViewBag.CityRoute';
         console.log(`Переход на страницу планеты: ${cityURL}`);
         window.location.href = cityURL;
     })
@@ -91,13 +94,18 @@
         radius: @ViewBag.VillageTransform['r'],
         fill: '#black',
         stroke: 'white',
-        strokeWidth: 2
+        strokeWidth: 2,
+        shadowColor: '@ViewBag.PlanetColor',
+        shadowBlur: 25,
+        shadowOpacity: 1
     });
 
     mainLayer.add(Village);
     Village.on("click", c =>
     {
-        alert("Деревня");
+        const villURL = '/Locality/@ViewBag.VillageRoute';
+        console.log(`Переход на страницу планеты: ${villURL}`);
+        window.location.href = villURL;
     })
     //поверхность
     const Surfce = new Konva.Circle({
@@ -106,13 +114,18 @@
         radius: @ViewBag.SurfceTransform['r'],
         fill: 'black',
         stroke: 'white',
-        strokeWidth: 2
+        strokeWidth: 2,
+        shadowColor: '@ViewBag.PlanetColor',
+        shadowBlur: 25,
+        shadowOpacity: 1
     });
 
     mainLayer.add(Surfce);
     Surfce.on("click", c =>
     {
-        alert('@Html.Raw(@ViewBag.SurfceTransform['d'])');
+        const surURL = '/Locality/@ViewBag.SurfaceRoute';
+        console.log(`Переход на страницу планеты: ${surURL}`);
+        window.location.href = surURL;
     })
 
     

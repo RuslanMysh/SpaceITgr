@@ -7,6 +7,9 @@
     ViewBag.LocalName = $"{SpaceData.Planets[173].LocalName}";
     ViewBag.URL = $"/Images/Earth.png";
     ViewBag.PlanetColor = "#4390eb";
+    ViewBag.CityRoute = SpaceData.Locations["c1"].Route;
+    ViewBag.VillageRoute = SpaceData.Locations["v1"].Route;
+    ViewBag.SurfaceRoute = SpaceData.Locations["s1"].Route;
     ViewBag.CityTransform = new Dictionary<char, int>()
     {
             {'x', 1480},

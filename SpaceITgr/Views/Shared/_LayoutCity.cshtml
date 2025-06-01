@@ -1,6 +1,34 @@
-﻿<h1>@ViewBag.CityName</h1>
+﻿<head>
+    <title>
+        @ViewBag.LoactionName
+    </title>
+    <style>
+        #cityname
+        {
+            text-align: center;
+            font-family: Courier;
+            font-size: 60px;
+        }
+        .text
+        {
+            text-align: center;
+            font-family: Courier;
+            font-size: 40px;
+            font-style: italic; 
+        }
+    </style>
+</head>
+<div id="cityname">
+    <span>@ViewBag.LoactionName</span>
+    <br />
+    <span class="text">Население: @ViewBag.LoactionPopulation</span>
+    
+</div>
 <body>
     <div>
-        @RenderBody()
+        @RenderBody()       
+    </div>
+    <div class="bgr">
+
     </div>
 </body>

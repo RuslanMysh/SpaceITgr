@@ -1,0 +1,21 @@
+﻿@using SpaceITgr.Models;
+@model SpaceITgr.Views.City.SurfaceModel
+@{
+    ViewBag.LoactionName = SpaceData.Locations["s1"].Name;
+    ViewBag.LoactionPopulation = SpaceData.Locations["s1"].Population;
+    Layout = "/Views/Shared/_LayoutCity.cshtml";
+}
+<head>
+    <style>
+        .bg {
+            background-image: url("/Images/surface1.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body class="bg">
+
+</body>
+

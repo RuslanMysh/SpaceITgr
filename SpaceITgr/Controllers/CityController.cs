@@ -11,14 +11,14 @@ namespace SpaceITgr.Controllers
             return View();
         }
 
-        [HttpGet("v1")]
-        public IActionResult v1()
+        [HttpGet("village1")]
+        public IActionResult village1()
         {
             return View();
         }
 
-        [HttpGet("s1")]
-        public IActionResult s1()
+        [HttpGet("surface1")]
+        public IActionResult surface1()
         {
             return View();
         }
