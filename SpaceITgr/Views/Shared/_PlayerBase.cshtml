@@ -80,7 +80,9 @@
     mainLayer.add(City);
     City.on("click", c =>
     {
-        alert("Город");
+        const cityURL = '/Locality/city1';
+        console.log(`Переход на страницу планеты: ${cityURL}`);
+        window.location.href = cityURL;
     })
     //деревня
     const Village = new Konva.Circle({

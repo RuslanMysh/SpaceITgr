@@ -21,5 +21,12 @@ namespace SpaceITgr.Models
 		{
 			{new Item("Предмет", 1, 1) }
 		};
+
+		public static Dictionary<string, Locality> Locations = new Dictionary<string, Locality>()
+        {
+			{"c1", new Locality("Город173_1", 50000000, 1, LocalityType.CapitalCity)},
+			{"v1", new Locality("НП173_199", 1000, 1, LocalityType.Village)},
+			{"s1", new Locality("М173_281", 0, 1, LocalityType.Surface)}
+		};
 	}
 }

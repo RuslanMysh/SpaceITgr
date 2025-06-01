@@ -1,0 +1,7 @@
+﻿@page
+@using SpaceITgr.Models;
+@model SpaceITgr.Views.City.CapitalCityModel
+@{
+    ViewBag.CityName = SpaceData.Locations["c1"].Name;
+    Layout = "/Views/Shared/_LayoutCity.cshtml";
+}

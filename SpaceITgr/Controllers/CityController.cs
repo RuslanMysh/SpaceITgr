@@ -2,22 +2,23 @@
 
 namespace SpaceITgr.Controllers
 {
+    [Route("Locality")]
     public class CityController : Controller
     {
-        [Route("CapitalCity")]
-        public IActionResult CapitalCity()
+        [HttpGet("city1")]
+        public IActionResult city1()
         {
             return View();
         }
 
-        [Route("Village")]
-        public IActionResult Village()
+        [HttpGet("v1")]
+        public IActionResult v1()
         {
             return View();
         }
 
-        [Route("Surface")]
-        public IActionResult Surface()
+        [HttpGet("s1")]
+        public IActionResult s1()
         {
             return View();
         }
