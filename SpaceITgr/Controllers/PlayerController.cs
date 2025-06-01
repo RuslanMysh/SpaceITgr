@@ -50,5 +50,14 @@ namespace SpaceITgr.Controllers
 
             return Json(InventoryList);
         }
+
+        [HttpPost("AddItemToInventory")]
+        public IActionResult AddItemToInventory(string Name, int Count, int Mass)
+        {
+            Console.WriteLine($"Adding item: Name={Name}, Count={Count}, Mass={Mass}");
+            SpaceData.Inventory.Add(new Item(Name, Mass, Count));
+            Console.WriteLine($"Inventory now has {SpaceData.Inventory.Count} items");
+            return Json(new { success = true, message = "Предмет добавлен!" });
+        }
     }
 }

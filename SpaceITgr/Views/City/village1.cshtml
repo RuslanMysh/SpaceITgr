@@ -62,11 +62,30 @@
     stage.add(mainLayer);
     mainLayer.draw();
 
-    ButtonGroup.on("click", q =>
-    {
-        alert("квееееест");
+    ButtonGroup.on("click", async () => {
+        try {
+            const response = await fetch("/Player/AddItemToInventory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Ключ от сейфа",
+                    Count: 1,
+                    Mass: 1
+                })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message);
+                // Закрываем старое модальное окно и открываем обновлённое
+                const oldModal = document.getElementById('inventory-modal');
+                if (oldModal) oldModal.remove();
+                ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+            }
+        } catch (error) {
+            console.error("Ошибка:", error);
+            alert("Не удалось добавить предмет!");
+        }
     });
-    ButtonGroup.on('mouseover', function (e) {
-        e.target.getStage().container().style.cursor = 'pointer';
-    });
+   
 </script>
