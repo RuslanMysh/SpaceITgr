@@ -16,6 +16,11 @@
             font-size: 40px;
             font-style: italic; 
         }
+
+        .konva-container
+        {
+            background-color: black;
+        }
     </style>
 </head>
 <div id="cityname">
@@ -24,11 +29,12 @@
     <span class="text">Население: @ViewBag.LoactionPopulation</span>
     
 </div>
+<div id="konva-container"></div>
 <body>
     <div>
         @RenderBody()       
     </div>
-    <div class="bgr">
-
-    </div>
+    <div class="bgr"></div>
+    
 </body>
+

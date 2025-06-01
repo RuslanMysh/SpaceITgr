@@ -7,14 +7,66 @@
 }
 <head>
     <style>
-        .bg {
+        #bg {
             background-image: url("/Images/village1.png");
             background-repeat: no-repeat;
             background-size: cover;
         }
+
     </style>
 </head>
 
-<body class="bg">
-
+<body id="bg">
+        <img style="margin-left: 30%; margin-top: 10%" width="1024" height="1024" src="/Images/Oldman.png" />
 </body>
+<script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
+<script>
+    const stage = new Konva.Stage({
+        container: 'konva-container',
+        width: window.innerWidth,
+        height: 200, // Достаточно для кнопки
+    });
+
+    const mainLayer = new Konva.Layer();
+
+    const ButtonPlanets = new Konva.Rect({
+        x: 1020, // Адаптивная позиция
+        y: 100,
+        width: 500,
+        height: 80,
+        stroke: 'gray',
+        strokeWidth: 2,
+        fill: 'white',
+        cornerRadius: 5,
+        shadowColor: '#595959',
+        shadowBlur: 20,
+        shadowOpacity: 0.1
+    });
+
+    const TextBtn = new Konva.Text({
+        x: 1020,
+        y: 100,
+        width: 500,
+        text: 'ВЗЯТЬ КВЕСТ',
+        fontSize: 70,
+        fontFamily: 'Courier',
+        fill: 'gray',
+        padding: 5,
+        align: 'center'
+    });
+
+    const ButtonGroup = new Konva.Group();
+    ButtonGroup.add(ButtonPlanets);
+    ButtonGroup.add(TextBtn);
+    mainLayer.add(ButtonGroup);
+    stage.add(mainLayer);
+    mainLayer.draw();
+
+    ButtonGroup.on("click", q =>
+    {
+        alert("квееееест");
+    });
+    ButtonGroup.on('mouseover', function (e) {
+        e.target.getStage().container().style.cursor = 'pointer';
+    });
+</script>

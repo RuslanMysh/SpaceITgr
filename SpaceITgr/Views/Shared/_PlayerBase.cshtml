@@ -56,7 +56,7 @@
     })();
 
 
-    //кнопка планет
+    //конва
 
     const kc = document.getElementById('konva-container');
     const stage = new Konva.Stage({
@@ -66,6 +66,25 @@
     });
 
     const mainLayer = new Konva.Layer();
+
+    //курсор городов
+    function cursorCity(city) {
+        if (city instanceof Konva.Circle) {
+            console.log("Это Konva.Circle!");
+            city.on('mouseover', function (e) {
+                e.target.getStage().container().style.cursor = 'pointer';
+            });
+            city.on('mouseout', function (e) {
+                e.target.getStage().container().style.cursor = 'default';
+            });
+        }
+        else {
+            console.error("Передан не Konva.Circle!");
+        }
+    }
+
+
+
 
     //город
     const City = new Konva.Circle({
@@ -78,15 +97,15 @@
         shadowColor: '@ViewBag.PlanetColor',
         shadowBlur: 25,
         shadowOpacity: 1
-    });
+    })
     
     mainLayer.add(City);
-    City.on("click", c =>
-    {
+    City.on("click", c => {
         const cityURL = '/Locality/@ViewBag.CityRoute';
         console.log(`Переход на страницу планеты: ${cityURL}`);
         window.location.href = cityURL;
     })
+    cursorCity(City);
     //деревня
     const Village = new Konva.Circle({
         x: @ViewBag.VillageTransform['x'],
@@ -98,15 +117,18 @@
         shadowColor: '@ViewBag.PlanetColor',
         shadowBlur: 25,
         shadowOpacity: 1
-    });
+    })
+    cursorCity(Village);
 
-    mainLayer.add(Village);
+    
     Village.on("click", c =>
     {
         const villURL = '/Locality/@ViewBag.VillageRoute';
         console.log(`Переход на страницу планеты: ${villURL}`);
         window.location.href = villURL;
     })
+    mainLayer.add(Village);
+
     //поверхность
     const Surfce = new Konva.Circle({
         x: @ViewBag.SurfceTransform['x'],
@@ -119,15 +141,15 @@
         shadowBlur: 25,
         shadowOpacity: 1
     });
+    
 
     mainLayer.add(Surfce);
-    Surfce.on("click", c =>
-    {
+    Surfce.on("click", c => {
         const surURL = '/Locality/@ViewBag.SurfaceRoute';
         console.log(`Переход на страницу планеты: ${surURL}`);
         window.location.href = surURL;
-    })
-
+    });
+    cursorCity(Surfce);
     
     // 2. Загружаем изображение Земли
     const imageObj = new Image();
@@ -160,6 +182,28 @@
     };
     imageObj.src = "@ViewBag.URL";
  
+    //курсор кнопок
+    function cursor(group) {
+        if (group instanceof Konva.Group) {
+            console.log("Это Konva.Group!");
+            group.on('mouseover', function (e) {
+                e.target.getStage().container().style.cursor = 'pointer';
+            });
+            group.on('mouseout', function (e) {
+                e.target.getStage().container().style.cursor = 'default';
+            });
+        }
+        else {
+            console.error("Передан не Konva.Group!");
+        }
+    }
+    
+
+
+
+
+
+
 
     const ButtonPlanets = new Konva.Rect(
         {
@@ -333,8 +377,8 @@
             alert('Ошибка при загрузке списка объектов: ' + error.message);
         }
     });
-
-
+    
+    cursor(ButtonGroup);
 
     //кнопка квестов
 
@@ -501,7 +545,7 @@
             alert('Ошибка при загрузке списка объектов: ' + error.message);
         }
     });
-
+    cursor(ButtonQuestsGroup);
 
 
 
@@ -647,6 +691,8 @@
             alert('Ошибка при загрузке списка объектов: ' + error.message);
         }
     });
-    
+    cursor(ButtonInventoryGroup);
+
+
     mainLayer.draw();
 </script>
