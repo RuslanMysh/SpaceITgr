@@ -7,7 +7,25 @@
     ViewBag.LocalName = $"{SpaceData.Planets[173].LocalName}";
     ViewBag.URL = $"/Images/Earth.png";
     ViewBag.PlanetColor = "#4390eb";
+    ViewBag.CityTransform = new Dictionary<char, int>()
+    {
+            {'x', 1480},
+            {'y', 800},
+            {'r', 10}
+    };
+    ViewBag.VillageTransform = new Dictionary<char, int>()
+    {
+            {'x', 1200},
+            {'y', 900},
+            {'r', 8}
+    };
+    ViewBag.SurfceTransform = new Dictionary<char, string>()
+    {
+            {'x', 1400.ToString()},
+            {'y', 1200.ToString()},
+            {'r', 7.ToString()},
+            {'d', "Лес"}
+    };
     Layout = "/Views/Shared/_Layout.cshtml";
 }
-
 

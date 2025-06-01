@@ -7,6 +7,25 @@
 	ViewBag.LocalName = $"{SpaceData.Planets[1731].LocalName}";
 	ViewBag.URL = $"/Images/Moon.png";
 	ViewBag.PlanetColor = "black";
+	ViewBag.CityTransform = new Dictionary<char, int>()
+	{
+			{'x', 1050},
+			{'y', 1000},
+			{'r', 9}
+	};
+	ViewBag.VillageTransform = new Dictionary<char, int>()
+	{
+			{'x', 1200},
+			{'y', 900},
+			{'r', 8}
+	};
+	ViewBag.SurfceTransform = new Dictionary<char, string>()
+	{
+			{'x', 1400.ToString()},
+			{'y', 1200.ToString()},
+			{'r', 7.ToString()},
+			{'d', "Лунные пустоши"}
+	};
 	Layout = "/Views/Shared/_Layout.cshtml";
 }
 
