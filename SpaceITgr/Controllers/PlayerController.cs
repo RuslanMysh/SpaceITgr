@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpaceITgr.Models;
+using System;
 using System.Linq;
 
 namespace SpaceITgr.Controllers
@@ -52,10 +53,11 @@ namespace SpaceITgr.Controllers
         }
 
         [HttpPost("AddItemToInventory")]
-        public IActionResult AddItemToInventory(string Name, int Count, int Mass)
+        public async Task<IActionResult> AddItemToInventory()
         {
-            Console.WriteLine($"Adding item: Name={Name}, Count={Count}, Mass={Mass}");
-            SpaceData.Inventory.Add(new Item(Name, Mass, Count));
+            var item = await Request.ReadFromJsonAsync<Item>();
+            Console.WriteLine($"Adding item: Name={item.Name}, Count={item.Count}, Mass={item.Mass}");
+            SpaceData.Inventory.Add(item);
             Console.WriteLine($"Inventory now has {SpaceData.Inventory.Count} items");
             return Json(new { success = true, message = "Предмет добавлен!" });
         }

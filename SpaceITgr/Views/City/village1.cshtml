@@ -10,21 +10,35 @@
         #bg {
             background-image: url("/Images/village1.png");
             background-repeat: no-repeat;
-            background-size: cover;
+            background-size: 100%;
+
+        }
+
+        .overlay-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-65%, 17.5%);
+            max-width: 600px;
+            width: 100%;
+            height: auto/* регулируйте размер */
         }
 
     </style>
 </head>
 
 <body id="bg">
-        <img style="margin-left: 30%; margin-top: 10%" width="1024" height="1024" src="/Images/Oldman.png" />
+    <img class="overlay-image" src="/Images/Oldman.png" />
 </body>
 <script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
 <script>
+    const sceneWidth = 2560;
+    const sceneHeight = 1400;
+
     const stage = new Konva.Stage({
         container: 'konva-container',
-        width: window.innerWidth,
-        height: 200, // Достаточно для кнопки
+        width: sceneWidth,
+        height: sceneHeight, // Достаточно для кнопки
     });
 
     const mainLayer = new Konva.Layer();
@@ -60,13 +74,12 @@
     ButtonGroup.add(TextBtn);
     mainLayer.add(ButtonGroup);
     stage.add(mainLayer);
-    mainLayer.draw();
+    
 
     ButtonGroup.on("click", async () => {
-        try {
             const response = await fetch("/Player/AddItemToInventory", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json" },
                 body: JSON.stringify({
                     Name: "Ключ от сейфа",
                     Count: 1,
@@ -81,11 +94,31 @@
                 const oldModal = document.getElementById('inventory-modal');
                 if (oldModal) oldModal.remove();
                 ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-            }
-        } catch (error) {
-            console.error("Ошибка:", error);
-            alert("Не удалось добавить предмет!");
-        }
+            }      
     });
-   
+
+    mainLayer.draw();
+    const kc = document.getElementById('konva-container');
+    function fitStageIntoParentContainer() {
+        // Make the container take up the full width
+        
+        kc.style.width = '100%';
+
+        // Get current container width
+        const containerWidth = kc.offsetWidth;
+
+        // Calculate scale based on virtual width vs actual width
+        const scale = containerWidth / sceneWidth;
+
+        // Set stage dimensions and scale
+        stage.width(sceneWidth * scale);
+        stage.height(sceneHeight * scale);
+        stage.scale({ x: scale, y: scale });
+    }
+
+    // Initial fit
+    fitStageIntoParentContainer();
+
+    // Adapt the stage on window resize
+    window.addEventListener('resize', fitStageIntoParentContainer);
 </script>
