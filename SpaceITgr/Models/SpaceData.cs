@@ -11,15 +11,14 @@ namespace SpaceITgr.Models
 			{175, new Planet(340000000, "Planet175", "Andromeda", false, PlanetType.Earth_Type, "Марс", DateTime.Now)},
 		};
 
-		public static Dictionary<string, Quest> Quests = new Dictionary<string, Quest>()
+		public static List<Quest> Quests = new List<Quest>()
 		{
-			{"p1", new Quest("Первый квест", "Блаблаблабла", new DateTime(2199, 05, 31, 11, 30, 00), QuestType.Current) },
-			{"s1", new Quest("Помощь учёному", "Блаблаблабла", new DateTime(2199, 06, 01, 14, 25, 00), QuestType.Current) }
+
 		};
 
 		public static List<Item> Inventory = new List<Item>()
 		{
-			{new Item("Предмет", 1, 1) }
+
 		};
 
 		public static Dictionary<string, Locality> Locations = new Dictionary<string, Locality>()

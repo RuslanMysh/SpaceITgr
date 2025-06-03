@@ -3,6 +3,7 @@
 @{
     ViewBag.LoactionName = SpaceData.Locations["v1"].Name;
     ViewBag.LoactionPopulation = SpaceData.Locations["v1"].Population;
+    ViewBag.CurrentTime = SpaceData.Planets[173].CurrentTime.ToString("o");
     Layout = "/Views/Shared/_LayoutCity.cshtml";
 }
 <head>
@@ -77,24 +78,55 @@
     
 
     ButtonGroup.on("click", async () => {
-            const response = await fetch("/Player/AddItemToInventory", {
+            alert("Я старшина этой деревни. Здесь ещё относительно спокойно, в отличии от города.");
+            alert("Я изучаю историю Системной Империи Андромеда, которая нас присоединила к себе.");
+            alert("Парень, если ты плланируешь хотя бы выйти из нашей системы, то тебе стоит нам помочь.");
+            alert("Слушай, на Марсе находится их ферма по выращиванию грока. Укради несколько, это поможет для исследования их культуры.");
+            alert("Вот тебе кодовые данные о Марсе, теперь ты можешь отправлятся. Ещё возьми слепок ключа от подвала фермы. Пусть Маск сбережёт тебя.");
+
+
+            
+
+
+
+            const responseInvent = await fetch("/Player/AddItemToInventory", {
                 method: "POST",
                 headers: {"Content-Type": "application/json" },
                 body: JSON.stringify({
-                    Name: "Ключ от сейфа",
+                    Name: "Слепок ключа от подвала.",
                     Count: 1,
                     Mass: 1
                 })
             });
+            const responseQuest = await fetch("/Player/AddQuest", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Спасибо Маску За Грок!",
+                    Desc: "Старшина деревни сказал вам отправлятся на Марс. На данной планете находится ферма грока. Вам нужно выкрасть несколько штук.",
+                    Date: "@ViewBag.CurrentTime"
+                })
+            });
 
-            const result = await response.json();
-            if (response.ok) {
-                alert(result.message);
-                // Закрываем старое модальное окно и открываем обновлённое
-                const oldModal = document.getElementById('inventory-modal');
-                if (oldModal) oldModal.remove();
-                ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-            }      
+            const resulInventt = await responseInvent.json();
+                if (responseInvent.ok) {
+                    alert(resulInventt.message);
+                    // Закрываем старое модальное окно и открываем обновлённое
+                    const oldModal = document.getElementById('inventory-modal');
+                    if (oldModal) oldModal.remove();
+                    ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+                }
+
+            
+            const resultQuest = await responseQuest.json();
+                if (responseQuest.ok) {
+                    alert(resultQuest.message);
+                    // Закрываем старое модальное окно и открываем обновлённое
+                    const oldModal = document.getElementById('quest-modal');
+                    if (oldModal) oldModal.remove();
+                    ButtonQuestsGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+                }
+            
     });
 
     mainLayer.draw();

@@ -2,6 +2,7 @@
 using SpaceITgr.Models;
 using System;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpaceITgr.Controllers
 {
@@ -25,13 +26,12 @@ namespace SpaceITgr.Controllers
 		[HttpGet("PlayerQuests")]
 		public JsonResult PlayerQuests()
 		{
-			var QuestsList = SpaceData.Quests.Select(p => new
+			var QuestsList = SpaceData.Quests.Select(q => new
 			{
-				Id = p.Key,
-				Name = p.Value.Name,
-				Type = p.Value.QuestType.ToString(),
-                Desc = p.Value.Description,
-                Date = p.Value.DateOfAppointment.ToString()
+				Name = q.Name,
+				Type = q.QuestType.ToString(),
+                Desc = q.Description,
+                Date = q.DateOfAppointment.ToString("yyyy.MM.dd HH:mm:ss")
 
             }).ToArray();
 
@@ -48,7 +48,7 @@ namespace SpaceITgr.Controllers
                 Count = p.Count
 
             }).ToArray();
-
+                
             return Json(InventoryList);
         }
 
@@ -56,10 +56,49 @@ namespace SpaceITgr.Controllers
         public async Task<IActionResult> AddItemToInventory()
         {
             var item = await Request.ReadFromJsonAsync<Item>();
+
             Console.WriteLine($"Adding item: Name={item.Name}, Count={item.Count}, Mass={item.Mass}");
             SpaceData.Inventory.Add(item);
+
             Console.WriteLine($"Inventory now has {SpaceData.Inventory.Count} items");
             return Json(new { success = true, message = "Предмет добавлен!" });
         }
+
+        [HttpPost("AddQuest")]
+        public async Task<IActionResult> AddQuest()
+        {
+            
+          
+            
+            try
+            {
+                var quest = await Request.ReadFromJsonAsync<QuestRequestModel>();
+                if (quest == null)
+                {
+                    return BadRequest(new { success = false, message = "Invalid data" });                                      
+                }
+                var newQuest = new Quest(
+                        Name: quest.Name,
+                        Description: quest.Desc,
+                        DateOfAppointment: DateTime.Parse(quest.Date),
+                        QuestType: QuestType.Current
+                );
+                SpaceData.Quests.Add(newQuest); 
+                Console.WriteLine($"Adding quest {newQuest.Name}");
+                return Json(new { success = true, message = "Квест добавлен!" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding quest: {ex.Message}");
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+    }
+
+    public class QuestRequestModel
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; }
+        public string Date { get; set; }
     }
 }
