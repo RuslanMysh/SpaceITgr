@@ -1,0 +1,33 @@
+﻿@page
+@using SpaceITgr.Models;
+@model SpaceITgr.Views.Planet.Planet175Model
+@{
+    ViewBag.CodeName = $"{SpaceData.Planets[175].CodeName}";
+    ViewBag.CurrentTime = SpaceData.Planets[175].CurrentTime.ToString("o");
+    ViewBag.LocalName = $"{SpaceData.Planets[175].LocalName}";
+    ViewBag.URL = $"/Images/Mars.png";
+    ViewBag.PlanetColor = "#ab4205";
+    ViewBag.CityRoute = SpaceData.Locations["c1"].Route;
+    ViewBag.VillageRoute = SpaceData.Locations["v1"].Route;
+    ViewBag.SurfaceRoute = SpaceData.Locations["s1"].Route;
+    ViewBag.CityTransform = new Dictionary<char, int>()
+    {
+            {'x', 1480},
+            {'y', 800},
+            {'r', 10}
+    };
+    ViewBag.VillageTransform = new Dictionary<char, int>()
+    {
+            {'x', 1200},
+            {'y', 900},
+            {'r', 8}
+    };
+    ViewBag.SurfceTransform = new Dictionary<char, string>()
+    {
+            {'x', 1400.ToString()},
+            {'y', 1200.ToString()},
+            {'r', 7.ToString()},
+            {'d', "Марсианские гейзеры"}
+    };
+    Layout = "/Views/Shared/_Layout.cshtml";
+}

@@ -3,7 +3,7 @@
 @{
     ViewBag.LoactionName = SpaceData.Locations["v1"].Name;
     ViewBag.LoactionPopulation = SpaceData.Locations["v1"].Population;
-    ViewBag.CurrentTime = SpaceData.Planets[173].CurrentTime.ToString("o");
+    ViewBag.CurrentTime = SpaceData.Planets[173].CurrentTime.ToString();
     Layout = "/Views/Shared/_LayoutCity.cshtml";
 }
 <head>
@@ -103,8 +103,8 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     Name: "Спасибо Маску За Грок!",
-                    Desc: "Старшина деревни сказал вам отправлятся на Марс. На данной планете находится ферма грока. Вам нужно выкрасть несколько штук.",
-                    Date: "@ViewBag.CurrentTime"
+                    Description: "Старшина деревни сказал вам отправлятся на Марс. На данной планете находится ферма грока. Вам нужно выкрасть несколько штук.",
+                    DateOfAppointment: "@ViewBag.CurrentTime"
                 })
             });
 
@@ -126,7 +126,22 @@
                     if (oldModal) oldModal.remove();
                     ButtonQuestsGroup.fire('click'); // Программно кликаем по кнопке инвентаря
                 }
-            
+
+            const responseStudy = await fetch("/Player/ChangePlanet", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ planetId: 175 })
+            });
+
+            if (!responseStudy.ok) {
+                const error = await responseStudy.json();
+                console.error("Ошибка изменения планеты:", error.message);
+                return;
+            }
+
+            const resultStudy = await responseStudy.json();
+            console.log("Статус планеты:", resultStudy);
+
     });
 
     mainLayer.draw();

@@ -31,7 +31,7 @@ namespace SpaceITgr.Controllers
 				Name = q.Name,
 				Type = q.QuestType.ToString(),
                 Desc = q.Description,
-                Date = q.DateOfAppointment.ToString("yyyy.MM.dd HH:mm:ss")
+                Date = q.DateOfAppointment
 
             }).ToArray();
 
@@ -66,21 +66,18 @@ namespace SpaceITgr.Controllers
 
         [HttpPost("AddQuest")]
         public async Task<IActionResult> AddQuest()
-        {
-            
-          
-            
+        {  
             try
             {
-                var quest = await Request.ReadFromJsonAsync<QuestRequestModel>();
+                var quest = await Request.ReadFromJsonAsync<Quest>();
                 if (quest == null)
                 {
                     return BadRequest(new { success = false, message = "Invalid data" });                                      
                 }
                 var newQuest = new Quest(
                         Name: quest.Name,
-                        Description: quest.Desc,
-                        DateOfAppointment: DateTime.Parse(quest.Date),
+                        Description: quest.Description,
+                        DateOfAppointment: quest.DateOfAppointment,
                         QuestType: QuestType.Current
                 );
                 SpaceData.Quests.Add(newQuest); 
@@ -93,12 +90,36 @@ namespace SpaceITgr.Controllers
                 return StatusCode(500, new { success = false, message = ex.Message });
             }
         }
-    }
 
-    public class QuestRequestModel
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; }
-        public string Date { get; set; }
+        [HttpPost("ChangePlanet")]
+        public IActionResult ChangePlanet([FromBody] ChangePlanetRequest request)
+        {
+            try
+            {
+                if (SpaceData.Planets.TryGetValue(request.PlanetId, out var planet))
+                {
+                    Console.WriteLine($"Before: {planet.StudiedByPlayer}");
+                    planet.StudiedByPlayer = true;
+                    Console.WriteLine($"After: {planet.StudiedByPlayer}");
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = $"Планета {planet.LocalName} теперь исследована",
+                        studied = planet.StudiedByPlayer
+                    });
+                }
+                return NotFound(new { success = false, message = "Планета не найдена" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        public class ChangePlanetRequest
+        {
+            public int PlanetId { get; set; }
+        }
     }
 }

@@ -4,10 +4,10 @@
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime DateOfAppointment { get; set; }
+        public string DateOfAppointment { get; set; }
         public QuestType QuestType { get; set; }
 
-        public Quest(string Name, string Description, DateTime DateOfAppointment, QuestType QuestType)
+        public Quest(string Name, string Description, string DateOfAppointment, QuestType QuestType)
         {
             this.Name = Name;
             this.Description = Description;

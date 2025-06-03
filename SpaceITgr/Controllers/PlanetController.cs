@@ -23,5 +23,10 @@ namespace SpaceITgr.Controllers
 		{
 			return View();
 		}
-	}
+        [HttpGet("Марс")]
+        public IActionResult Planet175()
+        {
+            return View();
+        }
+    }
 }
