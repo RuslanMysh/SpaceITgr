@@ -7,25 +7,25 @@
     ViewBag.LocalName = $"{SpaceData.Planets[175].LocalName}";
     ViewBag.URL = $"/Images/Mars.png";
     ViewBag.PlanetColor = "#ab4205";
-    ViewBag.CityRoute = SpaceData.Locations["c1"].Route;
-    ViewBag.VillageRoute = SpaceData.Locations["v1"].Route;
-    ViewBag.SurfaceRoute = SpaceData.Locations["s1"].Route;
+    ViewBag.CityRoute = SpaceData.Locations["c2"].Route;
+    ViewBag.VillageRoute = SpaceData.Locations["v2"].Route;
+    ViewBag.SurfaceRoute = SpaceData.Locations["s2"].Route;
     ViewBag.CityTransform = new Dictionary<char, int>()
     {
-            {'x', 1480},
-            {'y', 800},
+            {'x', 1280},
+            {'y', 750},
             {'r', 10}
     };
     ViewBag.VillageTransform = new Dictionary<char, int>()
     {
-            {'x', 1200},
-            {'y', 900},
+            {'x', 1100},
+            {'y', 700},
             {'r', 8}
     };
     ViewBag.SurfceTransform = new Dictionary<char, string>()
     {
             {'x', 1400.ToString()},
-            {'y', 1200.ToString()},
+            {'y', 1400.ToString()},
             {'r', 7.ToString()},
             {'d', "Марсианские гейзеры"}
     };

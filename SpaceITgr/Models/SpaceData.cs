@@ -25,7 +25,10 @@ namespace SpaceITgr.Models
         {
 			{"c1", new Locality("Город173_1", 50000000, 1, LocalityType.CapitalCity, "city1")},
 			{"v1", new Locality("НП173_199", 1000, 1, LocalityType.Village, "village1")},
-			{"s1", new Locality("М173_281", 0, 1, LocalityType.Surface, "surface1")}
-		};
+			{"s1", new Locality("М173_281", 0, 1, LocalityType.Surface, "surface1")},
+            {"c2", new Locality("Город175_2", 10000000, 1, LocalityType.CapitalCity, "city2")},
+            {"v2", new Locality("НП175_105", 100, 1, LocalityType.Village, "village2")},
+            {"s2", new Locality("М175_304", 0, 1, LocalityType.Surface, "surface2")}
+        };
 	}
 }

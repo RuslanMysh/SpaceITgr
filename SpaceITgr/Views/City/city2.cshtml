@@ -1,0 +1,30 @@
+﻿@using SpaceITgr.Models;
+@model SpaceITgr.Views.City.CapitalCityModel
+@{
+    ViewBag.LoactionName = SpaceData.Locations["c2"].Name;
+    ViewBag.LoactionPopulation = SpaceData.Locations["c2"].Population;
+    Layout = "/Views/Shared/_LayoutCity.cshtml";
+}
+<head>
+    <style>
+        #bg {
+            background-image: url("/Images/city2.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .overlay-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(35%, 17.5%);
+            max-width: 600px;
+            width: 100%;
+            height: auto /* регулируйте размер */
+        }
+    </style>
+</head>
+
+<body id="bg">
+    <img class="overlay-image" src="/Images/OldmanGreen.png" />
+</body>

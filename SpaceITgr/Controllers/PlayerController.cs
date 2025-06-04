@@ -92,34 +92,20 @@ namespace SpaceITgr.Controllers
         }
 
         [HttpPost("ChangePlanet")]
-        public IActionResult ChangePlanet([FromBody] ChangePlanetRequest request)
+        public async Task<IActionResult> ChangePlanet()
         {
-            try
-            {
-                if (SpaceData.Planets.TryGetValue(request.PlanetId, out var planet))
-                {
-                    Console.WriteLine($"Before: {planet.StudiedByPlayer}");
-                    planet.StudiedByPlayer = true;
-                    Console.WriteLine($"After: {planet.StudiedByPlayer}");
-
-                    return Json(new
-                    {
-                        success = true,
-                        message = $"Планета {planet.LocalName} теперь исследована",
-                        studied = planet.StudiedByPlayer
-                    });
-                }
-                return NotFound(new { success = false, message = "Планета не найдена" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = ex.Message });
-            }
+            var planet = await Request.ReadFromJsonAsync<Planet>();
+            Console.WriteLine(planet.CodeName, planet.StudiedByPlayer);
+            SpaceData.Planets[175].StudiedByPlayer = planet.StudiedByPlayer;
+            return Json(planet);
         }
-
-        public class ChangePlanetRequest
+        [HttpPost("RemoveItem")]
+        public async Task<IActionResult> RemoveItem([FromBody] int index)
         {
-            public int PlanetId { get; set; }
+            
+            Console.WriteLine(index);
+            SpaceData.Inventory.RemoveAt(index);
+            return Json(index);
         }
     }
 }

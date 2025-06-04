@@ -108,9 +108,18 @@
                 })
             });
 
-            const resulInventt = await responseInvent.json();
+        const responseStudy = await fetch("/Player/ChangePlanet", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                ({
+                    CodeName: "Planet175",
+                    StudiedByPlayer: true
+                })
+            });
+            const resultInvent = await responseInvent.json();
                 if (responseInvent.ok) {
-                    alert(resulInventt.message);
+            alert(resultInvent.message);
                     // Закрываем старое модальное окно и открываем обновлённое
                     const oldModal = document.getElementById('inventory-modal');
                     if (oldModal) oldModal.remove();
@@ -127,23 +136,19 @@
                     ButtonQuestsGroup.fire('click'); // Программно кликаем по кнопке инвентаря
                 }
 
-            const responseStudy = await fetch("/Player/ChangePlanet", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ planetId: 175 })
-            });
-
-            if (!responseStudy.ok) {
-                const error = await responseStudy.json();
-                console.error("Ошибка изменения планеты:", error.message);
-                return;
-            }
+            
 
             const resultStudy = await responseStudy.json();
-            console.log("Статус планеты:", resultStudy);
+            if (responseStudy.ok) {
+                alert("планета изменена");
+                // Закрываем старое модальное окно и открываем обновлённое
+                const oldModal = document.getElementById('planet-modal');
+                if (oldModal) oldModal.remove();
+                ButtonGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+            }
 
     });
-
+    cursor(ButtonGroup);
     mainLayer.draw();
     const kc = document.getElementById('konva-container');
     function fitStageIntoParentContainer() {
@@ -168,4 +173,19 @@
 
     // Adapt the stage on window resize
     window.addEventListener('resize', fitStageIntoParentContainer);
+
+    function cursor(group) {
+        if (group instanceof Konva.Group) {
+            console.log("Это Konva.Group!");
+            group.on('mouseover', function (e) {
+                e.target.getStage().container().style.cursor = 'pointer';
+            });
+            group.on('mouseout', function (e) {
+                e.target.getStage().container().style.cursor = 'default';
+            });
+        }
+        else {
+            console.error("Передан не Konva.Group!");
+        }
+    }
 </script>

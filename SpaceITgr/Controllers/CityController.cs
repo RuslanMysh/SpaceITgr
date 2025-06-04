@@ -22,5 +22,22 @@ namespace SpaceITgr.Controllers
         {
             return View();
         }
+        [HttpGet("city2")]
+        public IActionResult city2()
+        {
+            return View();
+        }
+
+        [HttpGet("village2")]
+        public IActionResult village2()
+        {
+            return View();
+        }
+
+        [HttpGet("surface2")]
+        public IActionResult surface2()
+        {
+            return View();
+        }
     }
 }
