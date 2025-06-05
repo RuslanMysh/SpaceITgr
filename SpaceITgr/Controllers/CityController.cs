@@ -39,5 +39,21 @@ namespace SpaceITgr.Controllers
         {
             return View();
         }
+
+        [HttpGet("city3")]
+        public IActionResult city3()
+        {
+            return View();
+        }
+        [HttpGet("village3")]
+        public IActionResult village3()
+        {
+            return View();
+        }
+        [HttpGet("surface3")]
+        public IActionResult surface3()
+        {
+            return View();
+        }
     }
 }

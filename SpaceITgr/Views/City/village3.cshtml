@@ -1,0 +1,21 @@
+﻿@using SpaceITgr.Models;
+@model SpaceITgr.Views.City.VillageModel
+@{
+    ViewBag.LoactionName = SpaceData.Locations["v3"].Name;
+    ViewBag.LoactionPopulation = SpaceData.Locations["v3"].Population;
+    ViewBag.CurrentTime = SpaceData.Planets[1731].CurrentTime.ToString();
+    Layout = "/Views/Shared/_LayoutCity.cshtml";
+}
+<head>
+    <style>
+        #bg {
+            background-image: url("/Images/village3.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+    </style>
+</head>
+
+<body id="bg">
+
+</body>
