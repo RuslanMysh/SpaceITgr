@@ -100,12 +100,12 @@ namespace SpaceITgr.Controllers
             return Json(planet);
         }
         [HttpPost("ChangeQuest")]
-        public async Task<IActionResult> ChangeQuest([FromBody] int index)
+        public async Task<IActionResult> ChangeQuest([FromBody] Quest quest)
         {
-            var quest = await Request.ReadFromJsonAsync<Quest>();
             Console.WriteLine(quest.Name, quest.Description, quest.QuestType);
             var questFind = SpaceData.Quests.Find(x => x.Name == "Спасибо Маску За Грок!");
-            questFind.QuestType = (QuestType)index;
+            questFind.QuestType = quest.QuestType;
+            Console.WriteLine($"{questFind.QuestType}");
             return Json(questFind);
         }
         [HttpPost("RemoveItem")]
