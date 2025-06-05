@@ -103,9 +103,11 @@ namespace SpaceITgr.Controllers
         public async Task<IActionResult> RemoveItem([FromBody] int index)
         {
             
-            Console.WriteLine(index);
-            SpaceData.Inventory.RemoveAt(index);
-            return Json(index);
+           
+                Console.WriteLine(index);
+                SpaceData.Inventory.RemoveAt(index);
+                return Json(index);
+            
         }
     }
 }

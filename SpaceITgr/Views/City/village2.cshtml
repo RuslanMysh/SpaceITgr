@@ -83,7 +83,6 @@
 
 
     ButtonGroup.on("click", async () => {
-
         const responseItem = await fetch("/Player/RemoveItem", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -100,6 +99,24 @@
             const oldModal = document.getElementById('inventory-modal');
             if (oldModal) oldModal.remove();
             ButtonGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+        }
+
+        const responseInvent = await fetch("/Player/AddItemToInventory", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                Name: "Грок",
+                Count: 3,
+                Mass: 6
+            })
+        });
+        const resultInvent = await responseInvent.json();
+        if (responseInvent.ok) {
+            alert(resultInvent.message);
+            // Закрываем старое модальное окно и открываем обновлённое
+            const oldModal = document.getElementById('inventory-modal');
+            if (oldModal) oldModal.remove();
+            ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
         }
 
     });
