@@ -81,6 +81,16 @@
         if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок")))
         {
             alert("Спасибо, тебе. ");
+
+            const responseItemRemove = await fetch("/Player/RemoveItem", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                    ({
+                        Name: "Копия ключа от подвала"
+                    })
+            });
+            const resultItemRemove = await responseItemRemove.json();
         }
         else
         {
@@ -105,7 +115,8 @@
                 body: JSON.stringify({
                     Name: "Спасибо Маску За Грок!",
                     Description: "Старшина деревни сказал вам отправлятся на Марс. На данной планете находится ферма грока. Вам нужно выкрасть несколько штук.",
-                    DateOfAppointment: "@ViewBag.CurrentTime"
+                    DateOfAppointment: "@ViewBag.CurrentTime",
+                    QuestType: 1
                 })
             });
             
@@ -128,11 +139,13 @@
 
                 })
             });
+            
 
             const resultInvent = await responseInvent.json();
             const resultQuest = await responseQuest.json();
             const resultChangeQuest = await responseChangeQuest.json();
             const resultStudy = await responseStudy.json();
+            
 
         }
             });

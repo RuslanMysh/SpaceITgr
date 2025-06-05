@@ -81,7 +81,7 @@ namespace SpaceITgr.Controllers
                         QuestType: QuestType.Current
                 );
                 SpaceData.Quests.Add(newQuest); 
-                Console.WriteLine($"Adding quest {newQuest.Name}");
+                Console.WriteLine($"Adding quest {newQuest.Name} {newQuest.QuestType}");
                 return Json(new { message = "Квест добавлен!" });
             }
             catch (Exception ex)
@@ -100,23 +100,37 @@ namespace SpaceITgr.Controllers
             return Json(planet);
         }
         [HttpPost("ChangeQuest")]
-        public async Task<IActionResult> ChangeQuest()
+        public async Task<IActionResult> ChangeQuest([FromBody] int index)
         {
             var quest = await Request.ReadFromJsonAsync<Quest>();
             Console.WriteLine(quest.Name, quest.Description, quest.QuestType);
             var questFind = SpaceData.Quests.Find(x => x.Name == "Спасибо Маску За Грок!");
-            questFind.QuestType = QuestType.Сompleted;
+            questFind.QuestType = (QuestType)index;
             return Json(questFind);
         }
         [HttpPost("RemoveItem")]
-        public async Task<IActionResult> RemoveItem([FromBody] int index)
+        public async Task<IActionResult> RemoveItem()
         {
+
+
+            if (SpaceData.Inventory.Exists(x => x.Name == "Грок"))
+            {
+                var invFind = SpaceData.Inventory.Find(x => x.Name == "Грок");
+                Console.WriteLine(invFind);
+                SpaceData.Inventory.Remove(invFind);
+                return Json(invFind);
+            }
+            else if (SpaceData.Inventory.Exists(x => x.Name == "Копия ключа от подвала"))
+            {
+                var invFind = SpaceData.Inventory.Find(x => x.Name == "Копия ключа от подвала");
+                Console.WriteLine(invFind);
+                SpaceData.Inventory.Remove(invFind);
+                return Json(invFind);
+            }
+            else { return Json(null); }
             
-           
-                Console.WriteLine(index);
-                SpaceData.Inventory.RemoveAt(index);
-                return Json(index);
-            
+
+
         }
     }
 }
