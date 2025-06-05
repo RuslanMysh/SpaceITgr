@@ -93,13 +93,7 @@
         });
 
         const resultItem = await responseItem.json();
-        if (responseItem.ok) {
-            alert("планета изменена");
-            // Закрываем старое модальное окно и открываем обновлённое
-            const oldModal = document.getElementById('inventory-modal');
-            if (oldModal) oldModal.remove();
-            ButtonGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-        }
+        
 
         const responseInvent = await fetch("/Player/AddItemToInventory", {
             method: "POST",
@@ -111,13 +105,7 @@
             })
         });
         const resultInvent = await responseInvent.json();
-        if (responseInvent.ok) {
-            alert(resultInvent.message);
-            // Закрываем старое модальное окно и открываем обновлённое
-            const oldModal = document.getElementById('inventory-modal');
-            if (oldModal) oldModal.remove();
-            ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-        }
+        
 
     });
 

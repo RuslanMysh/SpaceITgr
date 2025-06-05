@@ -61,7 +61,7 @@ namespace SpaceITgr.Controllers
             SpaceData.Inventory.Add(item);
 
             Console.WriteLine($"Inventory now has {SpaceData.Inventory.Count} items");
-            return Json(new { success = true, message = "Предмет добавлен!" });
+            return Json(new { message = "Предмет добавлен!" });
         }
 
         [HttpPost("AddQuest")]
@@ -82,7 +82,7 @@ namespace SpaceITgr.Controllers
                 );
                 SpaceData.Quests.Add(newQuest); 
                 Console.WriteLine($"Adding quest {newQuest.Name}");
-                return Json(new { success = true, message = "Квест добавлен!" });
+                return Json(new { message = "Квест добавлен!" });
             }
             catch (Exception ex)
             {
@@ -98,6 +98,15 @@ namespace SpaceITgr.Controllers
             Console.WriteLine(planet.CodeName, planet.StudiedByPlayer);
             SpaceData.Planets[175].StudiedByPlayer = planet.StudiedByPlayer;
             return Json(planet);
+        }
+        [HttpPost("ChangeQuest")]
+        public async Task<IActionResult> ChangeQuest()
+        {
+            var quest = await Request.ReadFromJsonAsync<Quest>();
+            Console.WriteLine(quest.Name, quest.Description, quest.QuestType);
+            var questFind = SpaceData.Quests.Find(x => x.Name == "Спасибо Маску За Грок!");
+            questFind.QuestType = QuestType.Сompleted;
+            return Json(questFind);
         }
         [HttpPost("RemoveItem")]
         public async Task<IActionResult> RemoveItem([FromBody] int index)

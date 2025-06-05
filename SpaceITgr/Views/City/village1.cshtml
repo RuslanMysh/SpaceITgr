@@ -80,7 +80,7 @@
     ButtonGroup.on("click", async () => {
         if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок")))
         {
-            alert("СПАСИБО");
+            alert("Спасибо, тебе. ");
         }
         else
         {
@@ -108,6 +108,7 @@
                     DateOfAppointment: "@ViewBag.CurrentTime"
                 })
             });
+            
 
             const responseStudy = await fetch("/Player/ChangePlanet", {
                 method: "POST",
@@ -118,35 +119,21 @@
                         StudiedByPlayer: true
                     })
             });
+            const responseChangeQuest = await fetch("/Player/ChangeQuest", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Спасибо Маску За Грок!",
+                    QuestType: 0
+
+                })
+            });
+
             const resultInvent = await responseInvent.json();
-            if (responseInvent.ok) {
-                alert(resultInvent.message);
-                // Закрываем старое модальное окно и открываем обновлённое
-                const oldModal = document.getElementById('inventory-modal');
-                if (oldModal) oldModal.remove();
-                ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-            }
-
-
             const resultQuest = await responseQuest.json();
-            if (responseQuest.ok) {
-                alert(resultQuest.message);
-                // Закрываем старое модальное окно и открываем обновлённое
-                const oldModal = document.getElementById('quest-modal');
-                if (oldModal) oldModal.remove();
-                ButtonQuestsGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-            }
-
-
-
+            const resultChangeQuest = await responseChangeQuest.json();
             const resultStudy = await responseStudy.json();
-            if (responseStudy.ok) {
-                alert("планета изменена");
-                // Закрываем старое модальное окно и открываем обновлённое
-                const oldModal = document.getElementById('planet-modal');
-                if (oldModal) { oldModal.remove(); }
-                ButtonGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-            }
+
         }
             });
             
