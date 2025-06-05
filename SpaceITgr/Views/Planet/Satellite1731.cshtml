@@ -7,7 +7,9 @@
 	ViewBag.LocalName = $"{SpaceData.Planets[1731].LocalName}";
 	ViewBag.URL = $"/Images/Moon.png";
 	ViewBag.PlanetColor = "black";
-	ViewBag.CityRoute = SpaceData.Locations["v1"].Route;
+	ViewBag.CityRoute = SpaceData.Locations["c3"].Route;
+	ViewBag.VillageRoute = SpaceData.Locations["v3"].Route;
+	ViewBag.SurfaceRoute = SpaceData.Locations["s3"].Route;
 	ViewBag.CityTransform = new Dictionary<char, int>()
 	{
 			{'x', 1050},
@@ -25,7 +27,7 @@
 			{'x', 1400.ToString()},
 			{'y', 1200.ToString()},
 			{'r', 7.ToString()},
-			{'d', "Лунные пустоши"}
+			{'d', "Лунные гейзеры"}
 	};
 	Layout = "/Views/Shared/_Layout.cshtml";
 }

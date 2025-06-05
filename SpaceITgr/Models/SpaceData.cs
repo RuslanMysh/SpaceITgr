@@ -9,7 +9,7 @@ namespace SpaceITgr.Models
 			{173, new Planet(9000000000, "Planet173", "Andromeda", true, PlanetType.Earth_Type, "Земля", new DateTime(2199, 06, 8, 11, 30, 00))},
 			{1731, new Planet(100000, "Satellite1731", "Andromeda", true, PlanetType.Satellite, "Луна", new DateTime(2199, 06, 8, 12, 00, 00))},
 			{175, new Planet(340000000, "Planet175", "Andromeda", false, PlanetType.Earth_Type, "Марс", DateTime.Now)},
-		};
+        };
 
 		public static List<Quest> Quests = new List<Quest>()
 		{
@@ -28,7 +28,10 @@ namespace SpaceITgr.Models
 			{"s1", new Locality("М173_281", 0, 1, LocalityType.Surface, "surface1")},
             {"c2", new Locality("Город175_2", 10000000, 1, LocalityType.CapitalCity, "city2")},
             {"v2", new Locality("НП175_105", 100, 1, LocalityType.Village, "village2")},
-            {"s2", new Locality("М175_304", 0, 1, LocalityType.Surface, "surface2")}
+            {"s2", new Locality("М175_304", 0, 1, LocalityType.Surface, "surface2")},
+			{"c3", new Locality("Город1731_3", 25000000, 1, LocalityType.CapitalCity, "city3")},
+            {"v3", new Locality("НП1731_134", 1000, 1, LocalityType.Village, "village3")},
+            {"s3", new Locality("М1731_527", 0, 1, LocalityType.Surface, "surface3")}
         };
 	}
 }
