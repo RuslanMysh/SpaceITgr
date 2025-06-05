@@ -62,7 +62,7 @@
         x: 1020,
         y: 100,
         width: 500,
-        text: 'ВЗЯТЬ КВЕСТ',
+        text: 'ПОГОВОРИТЬ',
         fontSize: 70,
         fontFamily: 'Courier',
         fill: 'gray',
@@ -78,22 +78,23 @@
     
 
     ButtonGroup.on("click", async () => {
+        if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок")))
+        {
+            alert("СПАСИБО");
+        }
+        else
+        {
             alert("Я старшина этой деревни. Здесь ещё относительно спокойно, в отличии от города.");
             alert("Я изучаю историю Системной Империи Андромеда, которая нас присоединила к себе.");
             alert("Парень, если ты плланируешь хотя бы выйти из нашей системы, то тебе стоит нам помочь.");
             alert("Слушай, на Марсе находится их ферма по выращиванию грока. Укради несколько, это поможет для исследования их культуры.");
             alert("Вот тебе кодовые данные о Марсе, теперь ты можешь отправлятся. Ещё возьми слепок ключа от подвала фермы. Пусть Маск сбережёт тебя.");
-
-
-            
-
-
-
+        
             const responseInvent = await fetch("/Player/AddItemToInventory", {
                 method: "POST",
-                headers: {"Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    Name: "Слепок ключа от подвала.",
+                    Name: "Копия ключа от подвала",
                     Count: 1,
                     Mass: 1
                 })
@@ -108,46 +109,47 @@
                 })
             });
 
-        const responseStudy = await fetch("/Player/ChangePlanet", {
+            const responseStudy = await fetch("/Player/ChangePlanet", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify
-                ({
-                    CodeName: "Planet175",
-                    StudiedByPlayer: true
-                })
+                    ({
+                        CodeName: "Planet175",
+                        StudiedByPlayer: true
+                    })
             });
             const resultInvent = await responseInvent.json();
-                if (responseInvent.ok) {
-            alert(resultInvent.message);
-                    // Закрываем старое модальное окно и открываем обновлённое
-                    const oldModal = document.getElementById('inventory-modal');
-                    if (oldModal) oldModal.remove();
-                    ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-                }
+            if (responseInvent.ok) {
+                alert(resultInvent.message);
+                // Закрываем старое модальное окно и открываем обновлённое
+                const oldModal = document.getElementById('inventory-modal');
+                if (oldModal) oldModal.remove();
+                ButtonInventoryGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+            }
 
-            
+
             const resultQuest = await responseQuest.json();
-                if (responseQuest.ok) {
-                    alert(resultQuest.message);
-                    // Закрываем старое модальное окно и открываем обновлённое
-                    const oldModal = document.getElementById('quest-modal');
-                    if (oldModal) oldModal.remove();
-                    ButtonQuestsGroup.fire('click'); // Программно кликаем по кнопке инвентаря
-                }
+            if (responseQuest.ok) {
+                alert(resultQuest.message);
+                // Закрываем старое модальное окно и открываем обновлённое
+                const oldModal = document.getElementById('quest-modal');
+                if (oldModal) oldModal.remove();
+                ButtonQuestsGroup.fire('click'); // Программно кликаем по кнопке инвентаря
+            }
 
-            
+
 
             const resultStudy = await responseStudy.json();
             if (responseStudy.ok) {
                 alert("планета изменена");
                 // Закрываем старое модальное окно и открываем обновлённое
                 const oldModal = document.getElementById('planet-modal');
-                if (oldModal) oldModal.remove();
+                if (oldModal) { oldModal.remove(); }
                 ButtonGroup.fire('click'); // Программно кликаем по кнопке инвентаря
             }
-
-    });
+        }
+            });
+            
     cursor(ButtonGroup);
     mainLayer.draw();
     const kc = document.getElementById('konva-container');
