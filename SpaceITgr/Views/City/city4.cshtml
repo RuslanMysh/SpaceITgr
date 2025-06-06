@@ -1,0 +1,32 @@
+﻿@page
+@using SpaceITgr.Models;
+@model SpaceITgr.Views.City.city4Model
+@{
+    ViewBag.LoactionName = SpaceData.Locations["c4"].Name;
+    ViewBag.LoactionPopulation = SpaceData.Locations["c4"].Population;
+    Layout = "/Views/Shared/_LayoutCity.cshtml";
+}
+<head>
+    <style>
+        #bg {
+            background-image: url("/Images/Throne.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        .overlay-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-49%, 6.5%);
+            max-width: 600px;
+            width: 100%;
+            height: auto /* регулируйте размер */
+        }
+
+    </style>
+</head>
+
+<body id="bg">
+    <img class="overlay-image" src="/Images/Boss.png" />
+</body>

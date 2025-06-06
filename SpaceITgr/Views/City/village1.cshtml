@@ -80,7 +80,7 @@
     ButtonGroup.on("click", async () => {
         if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок")))
         {
-            alert("Спасибо, тебе. ");
+            alert("Спасибо, тебе. У меня есть родной брат, мы с ним работаем над исследованием.");
 
             const responseItemRemove = await fetch("/Player/RemoveItem", {
                 method: "POST",
@@ -101,8 +101,19 @@
 
                 })
             });
+            const responseStudy2 = await fetch("/Player/ChangePlanet", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                    ({
+                        ID: 001,
+                        StudiedByPlayer: true
+                    })
+            });
+
             const resultChangeQuest = await responseChangeQuest.json();
             const updatedQuests = await fetch('/Player/PlayerQuests').then(r => r.json());
+            const resultStudy2 = await responseStudy2.json();
         }
         else
         {
@@ -138,7 +149,7 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify
                     ({
-                        CodeName: "Planet175",
+                        ID: 175,
                         StudiedByPlayer: true
                     })
             });

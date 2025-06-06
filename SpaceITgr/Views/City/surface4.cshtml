@@ -1,0 +1,23 @@
+﻿@using SpaceITgr.Models;
+@model SpaceITgr.Views.City.surface4Model
+@{
+    ViewBag.LoactionName = SpaceData.Locations["s4"].Name;
+    ViewBag.LoactionPopulation = SpaceData.Locations["s4"].Population;
+    Layout = "/Views/Shared/_LayoutCity.cshtml";
+}
+<head>
+    <style>
+        #bg {
+            background-image: url("/Images/surface4.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+
+
+    </style>
+</head>
+
+<body id="bg">
+
+</body>

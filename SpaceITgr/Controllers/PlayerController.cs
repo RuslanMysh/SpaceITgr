@@ -6,10 +6,11 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpaceITgr.Controllers
 {
+
 	[Route("Player")]
 	public class PlayerController : Controller
 	{
-		[HttpGet("PlayerPlanets")]
+        [HttpGet("PlayerPlanets")]
         public JsonResult PlayerPlanets()
 		{
             var planetsList = SpaceData.Planets.Select(p => new
@@ -64,6 +65,7 @@ namespace SpaceITgr.Controllers
             return Json(new { message = "Предмет добавлен!" });
         }
 
+
         [HttpPost("AddQuest")]
         public async Task<IActionResult> AddQuest()
         {  
@@ -92,13 +94,19 @@ namespace SpaceITgr.Controllers
         }
 
         [HttpPost("ChangePlanet")]
-        public async Task<IActionResult> ChangePlanet()
+        public async Task<IActionResult> ChangePlanet([FromBody] Planet? planet)
         {
-            var planet = await Request.ReadFromJsonAsync<Planet>();
-            Console.WriteLine(planet.CodeName, planet.StudiedByPlayer);
-            SpaceData.Planets[175].StudiedByPlayer = planet.StudiedByPlayer;
-            return Json(planet);
+            if (SpaceData.Planets.TryGetValue(planet.ID, out var p))
+            {
+                p.StudiedByPlayer = planet.StudiedByPlayer;
+                Console.WriteLine($"Планета {p.LocalName} (ID: {planet.CodeName}) изменена на {planet.StudiedByPlayer}");
+                return Json(new { success = true });
+            }
+            return NotFound(new { success = false, message = "Планета не найдена" });
+
+            
         }
+
         [HttpPost("ChangeQuest")]
         public async Task<IActionResult> ChangeQuest([FromBody] Quest quest)
         {

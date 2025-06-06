@@ -9,8 +9,9 @@
 		public string Belongs { get; set; }
 		public bool StudiedByPlayer { get; set; }
         public PlanetType PlanetType { get; set; }
+		public int ID { get; set; }
 
-		public Planet(long Population, string CodeName, string Belongs, bool StudiedByPlayer, PlanetType PlanetType, string LocalName, DateTime CurrentTime)
+		public Planet(long Population, string CodeName, string Belongs, bool StudiedByPlayer, PlanetType PlanetType, string LocalName, DateTime CurrentTime, int ID)
 		{
 			this.Population = Population;
 			this.CodeName = CodeName;
@@ -19,6 +20,7 @@
 			this.PlanetType = PlanetType;
 			this.LocalName = LocalName;
 			this.CurrentTime = CurrentTime;
+			this.ID = ID;
 		}
 	}
 

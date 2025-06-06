@@ -1,0 +1,33 @@
+﻿@page
+@using SpaceITgr.Models;
+@model SpaceITgr.Views.Planet.Planet001Model
+@{
+    ViewBag.CodeName = $"{SpaceData.Planets[001].CodeName}";
+    ViewBag.CurrentTime = SpaceData.Planets[001].CurrentTime.ToString("o");
+    ViewBag.LocalName = $"{SpaceData.Planets[001].LocalName}";
+    ViewBag.URL = $"/Images/MuskPlanet.png";
+    ViewBag.PlanetColor = "#a89b27";
+    ViewBag.CityRoute = SpaceData.Locations["c4"].Route;
+    ViewBag.VillageRoute = SpaceData.Locations["v4"].Route;
+    ViewBag.SurfaceRoute = SpaceData.Locations["s4"].Route;
+    ViewBag.CityTransform = new Dictionary<char, int>()
+    {
+            {'x', 1380},
+            {'y', 900},
+            {'r', 10}
+    };
+    ViewBag.VillageTransform = new Dictionary<char, int>()
+    {
+            {'x', 1700},
+            {'y', 650},
+            {'r', 8}
+    };
+    ViewBag.SurfceTransform = new Dictionary<char, string>()
+    {
+            {'x', 1400.ToString()},
+            {'y', 1400.ToString()},
+            {'r', 7.ToString()},
+            {'d', "ГОРЫ"}
+    };
+    Layout = "/Views/Shared/_Layout.cshtml";
+}

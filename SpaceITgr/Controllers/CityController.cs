@@ -55,5 +55,21 @@ namespace SpaceITgr.Controllers
         {
             return View();
         }
+
+        [HttpGet("city4")]
+        public IActionResult city4()
+        {
+            return View();
+        }
+        [HttpGet("village4")]
+        public IActionResult village4()
+        {
+            return View();
+        }
+        [HttpGet("surface4")]
+        public IActionResult surface4()
+        {
+            return View();
+        }
     }
 }
