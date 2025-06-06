@@ -108,13 +108,26 @@ namespace SpaceITgr.Controllers
         }
 
         [HttpPost("ChangeQuest")]
-        public async Task<IActionResult> ChangeQuest([FromBody] Quest quest)
+        public async Task<IActionResult> ChangeQuest([FromBody] Quest updatedQuest)
         {
-            Console.WriteLine(quest.Name, quest.Description, quest.QuestType);
-            var questFind = SpaceData.Quests.Find(x => x.Name == "Спасибо Маску За Грок!");
-            questFind.QuestType = quest.QuestType;
-            Console.WriteLine($"{questFind.QuestType}");
-            return Json(questFind);
+            if (updatedQuest == null)
+                return BadRequest("Данные квеста не предоставлены");
+
+            var existingQuest = SpaceData.Quests.FirstOrDefault(q => q.Name == updatedQuest.Name);
+            if (existingQuest == null)
+                return NotFound($"Квест '{updatedQuest.Name}' не найден");
+
+            existingQuest.QuestType = updatedQuest.QuestType;
+
+            return Json(new
+            {
+                success = true,
+                quest = new
+                {
+                    existingQuest.Name,
+                    existingQuest.QuestType
+                }
+            });
         }
         [HttpPost("RemoveItem")]
         public async Task<IActionResult> RemoveItem()
@@ -131,6 +144,20 @@ namespace SpaceITgr.Controllers
             else if (SpaceData.Inventory.Exists(x => x.Name == "Копия ключа от подвала"))
             {
                 var invFind = SpaceData.Inventory.Find(x => x.Name == "Копия ключа от подвала");
+                Console.WriteLine(invFind);
+                SpaceData.Inventory.Remove(invFind);
+                return Json(invFind);
+            }
+            else if (SpaceData.Inventory.Exists(x => x.Name == "Ведро"))
+            {
+                var invFind = SpaceData.Inventory.Find(x => x.Name == "Ведро");
+                Console.WriteLine(invFind);
+                SpaceData.Inventory.Remove(invFind);
+                return Json(invFind);
+            }
+            else if (SpaceData.Inventory.Exists(x => x.Name == "Ведро с лунной водой"))
+            {
+                var invFind = SpaceData.Inventory.Find(x => x.Name == "Ведро с лунной водой");
                 Console.WriteLine(invFind);
                 SpaceData.Inventory.Remove(invFind);
                 return Json(invFind);

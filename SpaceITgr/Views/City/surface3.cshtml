@@ -18,4 +18,132 @@
 <body class="bg">
 
 </body>
+<script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
+<script>
+    function cursor(group) {
+        if (group instanceof Konva.Group) {
+            console.log("Это Konva.Group!");
+            group.on('mouseover', function (e) {
+                e.target.getStage().container().style.cursor = 'pointer';
+            });
+            group.on('mouseout', function (e) {
+                e.target.getStage().container().style.cursor = 'default';
+            });
+        }
+        else {
+            console.error("Передан не Konva.Group!");
+        }
+    }
 
+
+    const sceneWidth = 2560;
+    const sceneHeight = 1400;
+
+    const stage = new Konva.Stage({
+        container: 'konva-container',
+        width: sceneWidth,
+        height: sceneHeight, // Достаточно для кнопки
+    });
+
+    const mainLayer = new Konva.Layer();
+
+    const ButtonPlanets = new Konva.Rect({
+        x: 1020, // Адаптивная позиция
+        y: 100,
+        width: 800,
+        height: 80,
+        stroke: 'gray',
+        strokeWidth: 2,
+        fill: 'white',
+        cornerRadius: 5,
+        shadowColor: '#595959',
+        shadowBlur: 20,
+        shadowOpacity: 0.1
+    });
+
+    const TextBtn = new Konva.Text({
+        x: 1020,
+        y: 100,
+        width: 800,
+        text: 'ИСПОЛЬЗОВАТЬ ВЕДРО',
+        fontSize: 70,
+        fontFamily: 'Courier',
+        fill: 'gray',
+        padding: 5,
+        align: 'center'
+    });
+
+    const ButtonGroup = new Konva.Group();
+    ButtonGroup.add(ButtonPlanets);
+    ButtonGroup.add(TextBtn);
+    mainLayer.add(ButtonGroup);
+    stage.add(mainLayer);
+
+
+    ButtonGroup.on("click", async () => {
+        if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Ведро")))
+        {
+            alert("Вы набрали лунной воды");
+           const responseItem = await fetch("/Player/RemoveItem", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                    ({
+                        Name: "Ведро"
+                    })
+            });
+
+           const resultItem = await responseItem.json();
+        
+
+            const responseInvent = await fetch("/Player/AddItemToInventory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Ведро с лунной водой",
+                    Count: 1,
+                    Mass: 2
+                })
+            });
+            const resultInvent = await responseInvent.json();
+        }
+        else
+        {
+            alert("Тут нет ничего инересного");
+        }
+        
+        
+
+    });
+
+    mainLayer.draw();
+
+
+
+    cursor(ButtonGroup);
+    const kc = document.getElementById('konva-container');
+    function fitStageIntoParentContainer() {
+        // Make the container take up the full width
+
+        kc.style.width = '100%';
+
+        // Get current container width
+        const containerWidth = kc.offsetWidth;
+
+        // Calculate scale based on virtual width vs actual width
+        const scale = containerWidth / sceneWidth;
+
+        // Set stage dimensions and scale
+        stage.width(sceneWidth * scale);
+        stage.height(sceneHeight * scale);
+        stage.scale({ x: scale, y: scale });
+    }
+
+    // Initial fit
+    fitStageIntoParentContainer();
+
+    // Adapt the stage on window resize
+    window.addEventListener('resize', fitStageIntoParentContainer);
+
+    
+</script>

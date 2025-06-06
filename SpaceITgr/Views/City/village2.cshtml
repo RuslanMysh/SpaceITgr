@@ -83,28 +83,37 @@
 
 
     ButtonGroup.on("click", async () => {
-        const responseItem = await fetch("/Player/RemoveItem", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify
-                ({
-                    Name: "Грок"
-                })
-        });
+        if (!@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок")))
+        {
+           alert("Вы собрали немного грока");
+           const responseItem = await fetch("/Player/RemoveItem", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                    ({
+                        Name: "Копия ключа от подвала"
+                    })
+            });
 
-        const resultItem = await responseItem.json();
+           const resultItem = await responseItem.json();
         
 
-        const responseInvent = await fetch("/Player/AddItemToInventory", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                Name: "Грок",
-                Count: 3,
-                Mass: 6
-            })
-        });
-        const resultInvent = await responseInvent.json();
+            const responseInvent = await fetch("/Player/AddItemToInventory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Грок",
+                    Count: 3,
+                    Mass: 6
+                })
+            });
+            const resultInvent = await responseInvent.json();
+        }
+        else
+        {
+            alert("Тут нет ничего инересного");
+        }
+        
         
 
     });

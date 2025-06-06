@@ -80,7 +80,7 @@
     ButtonGroup.on("click", async () => {
         if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок")))
         {
-            alert("Спасибо, тебе. У меня есть родной брат, мы с ним работаем над исследованием.");
+            alert("Спасибо, тебе. У меня есть родной брат, мы с ним работаем над исследованием загадочной планеты Маск. Приходи к нему он тебе расскажет про неё. Он живёт в городе на Марсе.");
 
             const responseItemRemove = await fetch("/Player/RemoveItem", {
                 method: "POST",
@@ -92,6 +92,18 @@
             });
             const resultItemRemove = await responseItemRemove.json();
 
+            const responseQuest2 = await fetch("/Player/AddQuest", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Зелёный дед",
+                    Description: "У старшины деревни есть родной брат. Он живёт на Марсе. Отправляйся к нему.",
+                    DateOfAppointment: "@ViewBag.CurrentTime",
+                    QuestType: 1
+                })
+            });
+            const resultQuest2 = await responseQuest2.json();
+
             const responseChangeQuest = await fetch("/Player/ChangeQuest", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -101,21 +113,12 @@
 
                 })
             });
-            const responseStudy2 = await fetch("/Player/ChangePlanet", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify
-                    ({
-                        ID: 001,
-                        StudiedByPlayer: true
-                    })
-            });
-
-            const resultChangeQuest = await responseChangeQuest.json();
+            const resultChangeQuest = await responseChangeQuest.json();         
+            
             const updatedQuests = await fetch('/Player/PlayerQuests').then(r => r.json());
-            const resultStudy2 = await responseStudy2.json();
+            
         }
-        else
+        else if(!@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Копия ключа от подвала")))
         {
             alert("Я старшина этой деревни. Здесь ещё относительно спокойно, в отличии от города.");
             alert("Я изучаю историю Системной Империи Андромеда, которая нас присоединила к себе.");
@@ -162,10 +165,11 @@
             
 
         }
+        else {alert("Иди за гроком");}
             });
-            
+       mainLayer.draw();     
     cursor(ButtonGroup);
-    mainLayer.draw();
+    
     const kc = document.getElementById('konva-container');
     function fitStageIntoParentContainer() {
         // Make the container take up the full width

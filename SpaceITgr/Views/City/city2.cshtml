@@ -28,3 +28,162 @@
 <body id="bg">
     <img class="overlay-image" src="/Images/OldmanGreen.png" />
 </body>
+<script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
+<script>
+    const sceneWidth = 2560;
+    const sceneHeight = 1400;
+
+    const stage = new Konva.Stage({
+        container: 'konva-container',
+        width: sceneWidth,
+        height: sceneHeight, // Достаточно для кнопки
+    });
+
+    const mainLayer = new Konva.Layer();
+
+    const ButtonPlanets = new Konva.Rect({
+        x: 1020, // Адаптивная позиция
+        y: 100,
+        width: 500,
+        height: 80,
+        stroke: 'black',
+        strokeWidth: 2,
+        fill: '#d05f06',
+        cornerRadius: 5,
+        shadowColor: '#595959',
+        shadowBlur: 20,
+        shadowOpacity: 0.1
+    });
+
+    const TextBtn = new Konva.Text({
+        x: 1020,
+        y: 100,
+        width: 500,
+        text: 'ПОГОВОРИТЬ',
+        fontSize: 70,
+        fontFamily: 'Courier',
+        fill: 'black',
+        padding: 5,
+        align: 'center'
+    });
+
+    const ButtonGroup = new Konva.Group();
+    ButtonGroup.add(ButtonPlanets);
+    ButtonGroup.add(TextBtn);
+    mainLayer.add(ButtonGroup);
+    stage.add(mainLayer);
+
+
+    ButtonGroup.on("click", async () => {
+        if (@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Ведро с лунной водой"))) {
+            alert("Спасибо, тебе. Подожди немного.");
+            alert("При помощи грока моего нарика и лунной воды я смог расшифровать эту древнющую криптограмму. На ней написаны координаты планеты Маск.");
+            alert("Отправляйся туда быстрее!");
+
+            const responseItemRemove = await fetch("/Player/RemoveItem", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                    ({
+                        Name: "Ведро с лунной водой"
+                    })
+            });
+            const resultItemRemove = await responseItemRemove.json();
+
+            const responseQuest = await fetch("/Player/AddQuest", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "ТРОН",
+                    Description: "ТРОН",
+                    DateOfAppointment: "@ViewBag.CurrentTime",
+                    QuestType: 1
+                })
+            });
+
+
+            const responseChangeQuest = await fetch("/Player/ChangeQuest", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Зелёный дед",
+                    QuestType: 0
+
+                })
+            });
+            const resultChangeQuest = await responseChangeQuest.json();
+
+            const responseStudy2 = await fetch("/Player/ChangePlanet", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify
+                    ({
+                        ID: 001,
+                        StudiedByPlayer: true
+                    })
+            });
+            const resultStudy2 = await responseStudy2.json();
+
+            const updatedQuests = await fetch('/Player/PlayerQuests').then(r => r.json());
+
+        }
+        else if (!@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Ведро")) && !@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Копия ключа от подвала")) && !@Json.Serialize(SpaceData.Inventory.Exists(x => x.Name == "Грок"))) {
+            alert("Да я зелёный, ичо?");
+            alert("Ты уж полюбасу с моим братом увиделся, он нарик кстати, короче нам нужна лунная вода, и тогда у нас получится изнать корды той планеты.");
+
+            const responseInvent = await fetch("/Player/AddItemToInventory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: "Ведро",
+                    Count: 1,
+                    Mass: 1
+                })
+            });
+
+            const resultInvent = await responseInvent.json();
+        }
+        else { alert(".....храп....."); }
+    });
+    mainLayer.draw();
+    cursor(ButtonGroup);
+   
+    const kc = document.getElementById('konva-container');
+    function fitStageIntoParentContainer() {
+        // Make the container take up the full width
+
+        kc.style.width = '100%';
+
+        // Get current container width
+        const containerWidth = kc.offsetWidth;
+
+        // Calculate scale based on virtual width vs actual width
+        const scale = containerWidth / sceneWidth;
+
+        // Set stage dimensions and scale
+        stage.width(sceneWidth * scale);
+        stage.height(sceneHeight * scale);
+        stage.scale({ x: scale, y: scale });
+    }
+
+    // Initial fit
+    fitStageIntoParentContainer();
+
+    // Adapt the stage on window resize
+    window.addEventListener('resize', fitStageIntoParentContainer);
+
+    function cursor(group) {
+        if (group instanceof Konva.Group) {
+            console.log("Это Konva.Group!");
+            group.on('mouseover', function (e) {
+                e.target.getStage().container().style.cursor = 'pointer';
+            });
+            group.on('mouseout', function (e) {
+                e.target.getStage().container().style.cursor = 'default';
+            });
+        }
+        else {
+            console.error("Передан не Konva.Group!");
+        }
+    }
+</script>

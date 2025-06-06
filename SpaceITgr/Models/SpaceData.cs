@@ -9,7 +9,7 @@ namespace SpaceITgr.Models
 			{173, new Planet(9000000000, "Planet173", "Andromeda", true, PlanetType.Earth_Type, "Земля", new DateTime(2199, 06, 8, 11, 30, 00), 173)},
 			{1731, new Planet(100000, "Satellite1731", "Andromeda", true, PlanetType.Satellite, "Луна", new DateTime(2199, 06, 8, 12, 00, 00), 1731)},
 			{175, new Planet(340000000, "Planet175", "Andromeda", false, PlanetType.Earth_Type, "Марс", new DateTime(2199, 06, 8, 21, 00, 00), 175)},
-            {001, new Planet(1, "Planet001", "independency", true, PlanetType.Dwarf_Planets, "Маск", new DateTime(2200, 06, 8, 11, 30, 00), 001)}
+            {001, new Planet(1, "Planet001", "independency", false, PlanetType.Dwarf_Planets, "Маск", new DateTime(2200, 06, 8, 11, 30, 00), 001)}
         };
 
 		public static List<Quest> Quests = new List<Quest>()
