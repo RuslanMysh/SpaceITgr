@@ -30,3 +30,106 @@
 <body id="bg">
     <img class="overlay-image" src="/Images/Boss.png" />
 </body>
+<script src="https://unpkg.com/konva@8.3.2/konva.min.js"></script>
+<script>
+    const sceneWidth = 2560;
+    const sceneHeight = 1400;
+
+    const stage = new Konva.Stage({
+        container: 'konva-container',
+        width: sceneWidth,
+        height: sceneHeight, // Достаточно для кнопки
+    });
+
+    const mainLayer = new Konva.Layer();
+
+    const ButtonPlanets = new Konva.Rect({
+        x: 1020, // Адаптивная позиция
+        y: 100,
+        width: 500,
+        height: 80,
+        stroke: 'black',
+        strokeWidth: 2,
+        fill: '#d9a011',
+        cornerRadius: 5,
+        shadowColor: '#595959',
+        shadowBlur: 20,
+        shadowOpacity: 0.1
+    });
+
+    const TextBtn = new Konva.Text({
+        x: 1020,
+        y: 100,
+        width: 500,
+        text: 'ПОГОВОРИТЬ',
+        fontSize: 70,
+        fontFamily: 'Courier',
+        fill: 'black',
+        padding: 5,
+        align: 'center'
+    });
+
+    const ButtonGroup = new Konva.Group();
+    ButtonGroup.add(ButtonPlanets);
+    ButtonGroup.add(TextBtn);
+    mainLayer.add(ButtonGroup);
+    stage.add(mainLayer);
+
+
+    ButtonGroup.on("click", async () => {
+        alert("КТО ТЫ? Я НЕ ОЖИДАЛ УВИДЕТЬ ЗДЕСЬ ПРОСТОГО СМЕРТНОГО. ");
+        alert("Я - Маск, основатель Первой Человеческой Республики во вселенной, создатель грока и множества других открытий.");
+        alert("Все люди считают, что трагически погиб, пропав между Землёй и Марсом, и решили восхвалять меня, как божественное создание.");
+        alert("Теперь, когда нас захватила Системная Империя Андромеда, не думаю что у человечества есть шансы на свободную жизнь.");
+        alert("О господи, как же я ненавижу себя за вывод людей вне солнечной системы. ");
+        alert("Наш народ теперь никогда не будет свободным. Даже если мы победим в войне против Андромеды, всегда найдётся рыба покрупнее.");
+        alert("Остаётся только выкуривать грок...");
+        alert("Если ты действительно хочешь свободы, то я могу переместить тебя в другую галктику, и если повезёт, то сможешь вернуться на Землю.");
+        alert("Пожалуй, так и сделаю...");
+
+        const villURL = '/Locality/galaxy';
+        console.log(`Переход на страницу планеты: ${villURL}`);
+        window.location.href = villURL;
+    });
+    mainLayer.draw();
+    cursor(ButtonGroup);
+
+    const kc = document.getElementById('konva-container');
+    function fitStageIntoParentContainer() {
+        // Make the container take up the full width
+
+        kc.style.width = '100%';
+
+        // Get current container width
+        const containerWidth = kc.offsetWidth;
+
+        // Calculate scale based on virtual width vs actual width
+        const scale = containerWidth / sceneWidth;
+
+        // Set stage dimensions and scale
+        stage.width(sceneWidth * scale);
+        stage.height(sceneHeight * scale);
+        stage.scale({ x: scale, y: scale });
+    }
+
+    // Initial fit
+    fitStageIntoParentContainer();
+
+    // Adapt the stage on window resize
+    window.addEventListener('resize', fitStageIntoParentContainer);
+
+    function cursor(group) {
+        if (group instanceof Konva.Group) {
+            console.log("Это Konva.Group!");
+            group.on('mouseover', function (e) {
+                e.target.getStage().container().style.cursor = 'pointer';
+            });
+            group.on('mouseout', function (e) {
+                e.target.getStage().container().style.cursor = 'default';
+            });
+        }
+        else {
+            console.error("Передан не Konva.Group!");
+        }
+    }
+</script>

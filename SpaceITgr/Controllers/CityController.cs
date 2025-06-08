@@ -71,5 +71,10 @@ namespace SpaceITgr.Controllers
         {
             return View();
         }
+        [HttpGet("galaxy")]
+        public IActionResult galaxy()
+        {
+            return View();
+        }
     }
 }
